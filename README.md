@@ -38,9 +38,9 @@ Oncocare is a meaningful healthcare web application that brings everything into 
 | Icons | Bootstrap Icons |
 | Fonts | Playfair Display + DM Sans |
 
----
-
 ## 🗂️ Project Structure
+
+~~~
 oncocare/
 │
 ├── accounts/        # User authentication and patient profile
@@ -53,8 +53,7 @@ oncocare/
 ├── dashboard/       # Main analytics dashboard
 ├── home/            # Landing page and privacy policy
 └── templates/       # All HTML templates
-
----
+~~~
 
 ## 🚀 Setup Instructions
 
