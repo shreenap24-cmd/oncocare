@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% block title %}Treatments{% endblock %}
+{% block nav_treatments %}active{% endblock %}
+{% block page_title %}My Treatments{% endblock %}
+{% block page_subtitle %}Track your treatment progress{% endblock %}
+
+{% block extra_style %}
+.prog-wrap { width:100px; }
+.prog-bar-sm { height:6px; border-radius:50px; background:#f0f4f8; overflow:hidden; margin-top:4px; }
+.prog-fill-sm { height:100%; border-radius:50px; background:linear-gradient(90deg,var(--teal),var(--teal-light)); }
+{% endblock %}
+
+{% block content %}
+<div class="page-card">
+    <div class="page-card-header">
+        <h5><i class="bi bi-activity"></i> All Treatments</h5>
+        <a href="{% url 'treatment_add' %}" class="btn-teal"><i class="bi bi-plus-lg"></i> Add Treatment</a>
+    </div>
+    <div class="page-card-body" style="padding:0;">
+        {% if treatments %}
+        <div class="table-responsive">
+            <table class="styled-table">
+                <thead>
+                    <tr>
+                        <th>Treatment</th><th>Type</th><th>Doctor</th>
+                        <th>Start Date</th><th>Progress</th><th>Status</th><th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for t in treatments %}
+                    <tr>
+                        <td><strong>{{ t.treatment_name }}</strong></td>
+                        <td>{{ t.get_treatment_type_display }}</td>
+                        <td>{{ t.doctor_name }}</td>
+                        <td>{{ t.start_date|date:"d M Y" }}</td>
+                        <td>
+                            {% if t.total_cycles %}
+                            <div class="prog-wrap">
+                                <div style="font-size:0.75rem;color:var(--muted);">{{ t.cycles_completed }}/{{ t.total_cycles }}</div>
+                                <div class="prog-bar-sm">
+                                    <div class="prog-fill-sm" style="width:{% widthratio t.cycles_completed t.total_cycles 100 %}%"></div>
+                                </div>
+                            </div>
+                            {% else %}—{% endif %}
+                        </td>
+                        <td>
+                            {% if t.status == 'ongoing' %}<span class="badge-ongoing">Ongoing</span>
+                            {% elif t.status == 'completed' %}<span class="badge-completed">Completed</span>
+                            {% else %}<span class="badge-planned">Planned</span>{% endif %}
+                        </td>
+                        <td>
+                            <a href="{% url 'treatment_edit' t.pk %}" class="tbl-action tbl-edit"><i class="bi bi-pencil"></i> Edit</a>
+                            <a href="{% url 'treatment_delete' t.pk %}" class="tbl-action tbl-delete"><i class="bi bi-trash"></i> Delete</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <i class="bi bi-activity"></i>
+            <p>No treatments yet.<br><a href="{% url 'treatment_add' %}" style="color:var(--teal);">Add your first treatment</a></p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

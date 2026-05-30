@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oncocare — Privacy Policy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root {
+            --teal:       #0a7c7c;
+            --teal-light: #12a5a5;
+            --teal-pale:  #e6f7f7;
+            --navy:       #0d2b45;
+            --cream:      #faf8f5;
+            --text:       #1a2e3b;
+            --muted:      #6b8190;
+            --accent:     #e8734a;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'DM Sans',sans-serif; background:var(--cream); color:var(--text); }
+
+        /* NAVBAR */
+        .navbar { background:var(--navy); padding:1rem 0; position:sticky; top:0; z-index:1000; border-bottom:1px solid rgba(255,255,255,0.07); }
+        .navbar-brand { font-family:'Playfair Display',serif; font-size:1.7rem; color:white!important; font-weight:700; }
+        .navbar-brand span { color:var(--teal-light); }
+        .nav-link { font-size:0.9rem; font-weight:500; color:rgba(255,255,255,0.65)!important; transition:color 0.2s; }
+        .nav-link:hover { color:white!important; }
+        .btn-nav { background:var(--teal); color:white; padding:0.4rem 1.2rem; border-radius:50px; font-size:0.88rem; font-weight:500; text-decoration:none; transition:all 0.2s; }
+        .btn-nav:hover { background:var(--teal-light); color:white; }
+
+        /* HERO */
+        .page-hero {
+            background: linear-gradient(135deg, var(--navy) 0%, #0a3d5c 100%);
+            padding: 5rem 0 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .page-hero::before {
+            content: '';
+            position: absolute;
+            top: -80px; right: -80px;
+            width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(10,124,124,0.15) 0%, transparent 65%);
+            border-radius: 50%;
+        }
+        .page-hero .label { font-size:0.78rem; font-weight:600; text-transform:uppercase; letter-spacing:2px; color:var(--teal-light); margin-bottom:0.75rem; }
+        .page-hero h1 { font-family:'Playfair Display',serif; font-size:clamp(2rem,4vw,3rem); color:white; font-weight:700; line-height:1.2; margin-bottom:1rem; }
+        .page-hero p { color:rgba(255,255,255,0.55); font-size:1rem; line-height:1.7; max-width:560px; }
+        .page-hero .updated { display:inline-flex; align-items:center; gap:0.4rem; background:rgba(255,255,255,0.08); color:rgba(255,255,255,0.5); padding:0.35rem 0.9rem; border-radius:50px; font-size:0.78rem; margin-top:1.5rem; }
+
+        /* CONTENT */
+        .privacy-content { padding: 5rem 0; }
+
+        .privacy-sidebar {
+            position: sticky;
+            top: 90px;
+        }
+
+        .toc-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+            border: 1px solid rgba(0,0,0,0.04);
+        }
+
+        .toc-card h6 {
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--muted);
+            margin-bottom: 1rem;
+        }
+
+        .toc-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 0.84rem;
+            padding: 0.45rem 0;
+            border-bottom: 1px solid #f5f5f5;
+            transition: color 0.2s;
+        }
+
+        .toc-link:last-child { border-bottom: none; }
+        .toc-link:hover { color: var(--teal); }
+        .toc-link i { font-size: 0.7rem; color: var(--teal); }
+
+        .highlight-box {
+            background: var(--teal-pale);
+            border-left: 3px solid var(--teal);
+            border-radius: 0 12px 12px 0;
+            padding: 1.2rem 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .highlight-box p {
+            font-size: 0.95rem;
+            color: var(--teal);
+            margin: 0;
+            line-height: 1.65;
+            font-weight: 500;
+        }
+
+        /* SECTIONS */
+        .privacy-section {
+            margin-bottom: 3rem;
+            scroll-margin-top: 100px;
+        }
+
+        .section-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px; height: 32px;
+            background: var(--navy);
+            color: white;
+            border-radius: 50%;
+            font-size: 0.82rem;
+            font-weight: 700;
+            margin-right: 0.6rem;
+            flex-shrink: 0;
+        }
+
+        .privacy-section h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            color: var(--navy);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .privacy-section p {
+            font-size: 0.93rem;
+            color: var(--muted);
+            line-height: 1.8;
+            margin-bottom: 0.85rem;
+        }
+
+        .privacy-section ul {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 0.85rem;
+        }
+
+        .privacy-section ul li {
+            font-size: 0.93rem;
+            color: var(--muted);
+            line-height: 1.75;
+            padding: 0.35rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .privacy-section ul li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.75rem;
+            width: 6px; height: 6px;
+            background: var(--teal);
+            border-radius: 50%;
+        }
+
+        .divider-line {
+            border: none;
+            border-top: 1px solid #f0f0f0;
+            margin: 3rem 0;
+        }
+
+        /* INFO CARDS */
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+        .info-card { background: white; border-radius: 14px; padding: 1.2rem; border: 1px solid rgba(0,0,0,0.05); }
+        .info-card i { color: var(--teal); font-size: 1.3rem; margin-bottom: 0.6rem; display: block; }
+        .info-card h6 { font-size: 0.85rem; font-weight: 700; color: var(--navy); margin-bottom: 0.3rem; }
+        .info-card p { font-size: 0.8rem; color: var(--muted); margin: 0; line-height: 1.5; }
+
+        /* CONTACT CARD */
+        .contact-card {
+            background: linear-gradient(135deg, var(--navy), #0a3d5c);
+            border-radius: 20px;
+            padding: 2.5rem;
+            color: white;
+            text-align: center;
+            margin-top: 3rem;
+        }
+        .contact-card i { font-size: 2.5rem; margin-bottom: 1rem; color: var(--teal-light); display: block; }
+        .contact-card h4 { font-family: 'Playfair Display', serif; font-size: 1.4rem; margin-bottom: 0.75rem; }
+        .contact-card p { color: rgba(255,255,255,0.55); font-size:0.9rem; line-height:1.65; margin-bottom:1.5rem; }
+        .contact-card a { background: var(--teal); color: white; padding: 0.7rem 2rem; border-radius: 50px; text-decoration: none; font-size: 0.9rem; font-weight: 600; transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.5rem; }
+        .contact-card a:hover { background: var(--teal-light); color: white; }
+
+        /* FOOTER */
+        footer { background: #060d14; padding: 2.5rem 0; }
+        .footer-brand { font-family:'Playfair Display',serif; font-size:1.3rem; color:white; font-weight:700; }
+        .footer-brand span { color:var(--teal-light); }
+        .footer-links a { color:rgba(255,255,255,0.4); text-decoration:none; font-size:0.82rem; margin-left:1.5rem; transition:color 0.2s; }
+        .footer-links a:hover { color:var(--teal-light); }
+        .footer-bottom { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem; }
+        .footer-bottom p { font-size:0.78rem; color:rgba(255,255,255,0.28); margin:0; }
+
+        @media(max-width: 768px) {
+            .privacy-sidebar { position: static; margin-bottom: 2rem; }
+            .info-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg">
+    <div class="container">
+        <a class="navbar-brand" href="/">Onco<span>care</span></a>
+        <div class="d-flex gap-2 ms-auto">
+            <a href="/accounts/login/" class="btn-nav">Log In</a>
+        </div>
+    </div>
+</nav>
+
+<!-- HERO -->
+<section class="page-hero">
+    <div class="container position-relative" style="z-index:1;">
+        <div class="label">Legal</div>
+        <h1>Privacy Policy</h1>
+        <p>
+            Your health data is deeply personal. This page explains clearly and honestly
+            what we collect, how we use it, and how we protect it.
+        </p>
+        <div class="updated">
+            <i class="bi bi-calendar3"></i> Last updated: May 2025
+        </div>
+    </div>
+</section>
+
+<!-- CONTENT -->
+<section class="privacy-content">
+    <div class="container">
+        <div class="row g-5">
+
+            <!-- SIDEBAR TOC -->
+            <div class="col-lg-3">
+                <div class="privacy-sidebar">
+                    <div class="toc-card">
+                        <h6>On This Page</h6>
+                        <a href="#overview" class="toc-link"><i class="bi bi-circle-fill"></i> Overview</a>
+                        <a href="#collect" class="toc-link"><i class="bi bi-circle-fill"></i> What We Collect</a>
+                        <a href="#use" class="toc-link"><i class="bi bi-circle-fill"></i> How We Use It</a>
+                        <a href="#store" class="toc-link"><i class="bi bi-circle-fill"></i> How We Store It</a>
+                        <a href="#share" class="toc-link"><i class="bi bi-circle-fill"></i> Sharing Your Data</a>
+                        <a href="#rights" class="toc-link"><i class="bi bi-circle-fill"></i> Your Rights</a>
+                        <a href="#cookies" class="toc-link"><i class="bi bi-circle-fill"></i> Cookies</a>
+                        <a href="#children" class="toc-link"><i class="bi bi-circle-fill"></i> Children</a>
+                        <a href="#changes" class="toc-link"><i class="bi bi-circle-fill"></i> Changes</a>
+                        <a href="#contact" class="toc-link"><i class="bi bi-circle-fill"></i> Contact</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MAIN CONTENT -->
+            <div class="col-lg-9">
+
+                <!-- HIGHLIGHT -->
+                <div class="highlight-box">
+                    <p>
+                        <i class="bi bi-shield-check"></i>
+                        &nbsp; <strong>Short version:</strong> We only collect what you give us.
+                        We never sell your data. Your health information stays private.
+                        This project is a college internship project and your data is
+                        stored locally for demonstration purposes only.
+                    </p>
+                </div>
+
+                <!-- 1. OVERVIEW -->
+                <div class="privacy-section" id="overview">
+                    <h2><span class="section-num">1</span> Overview</h2>
+                    <p>
+                        Oncocare ("we", "our", or "the platform") is a healthcare companion
+                        web application built to help cancer patients manage their recovery journey.
+                        This Privacy Policy explains how we handle the personal and health-related
+                        information you provide when using Oncocare.
+                    </p>
+                    <p>
+                        This platform was developed as a college internship project. It is not
+                        a commercial medical application and should not be used as a substitute
+                        for professional medical advice, diagnosis, or treatment.
+                    </p>
+                </div>
+
+                <hr class="divider-line">
+
+                <!-- 2. WHAT WE COLLECT -->
+                <div class="privacy-section" id="collect">
+                    <h2><span class="section-num">2</span> What We Collect</h2>
+                    <p>We collect only the information you directly provide to us:</p>
+
+                    <div class="info-grid">
+                        <div class="info-card">
+                            <i class="bi bi-person-circle"></i>
+                            <h6>Account Information</h6>
+                            <p>Username, email address, and password when you register.</p>
+                        </div>
+                        <div class="info-card">
+                            <i class="bi bi-heart-pulse"></i>
+                            <h6>Health Information</h6>
+                            <p>Treatments, medications, appointments, symptoms, and biomarker readings you log.</p>
+                        </div>
+                        <div class="info-card">
+                            <i class="bi bi-file-earmark-medical"></i>
+                            <h6>Uploaded Files</h6>
+                            <p>Lab reports you choose to upload as PDF or image files.</p>
+                        </div>
+                        <div class="info-card">
+                            <i class="bi bi-person-vcard"></i>
+                            <h6>Profile Details</h6>
+                            <p>Optional details like date of birth, blood group, phone, and address.</p>
+                        </div>
+                    </div>
+
+                    <p>
+                        We do not collect any information automatically beyond what is
+                        required for the application to function. We do not track your
+                        location, browsing behaviour, or device information.
+                    </p>
+                </div>
+
+                <hr class="divider-line">
+
+                <!-- 3. HOW WE USE IT -->
+                <div class="privacy-section" id="use">
+                    <h2><span class="section-num">3</span> How We Use Your Information</h2>
+                    <p>Your information is used solely to provide you with the features of Oncocare:</p>
+                    <ul>
+                        <li>To display your health data on your personal dashboard</li>
+                        <li>To generate biomarker trend charts specific to your cancer type</li>
+                        <li>To show upcoming appointments and active medications</li>
+                        <li>To allow you to log and review your symptoms over time</li>
+                        <li>To store and display your uploaded lab reports</li>
+                        <li>To keep your account secure with login authentication</li>
+                    </ul>
+                    <p>
+                        We do not use your data for marketing, advertising, analytics,
+                        or any purpose beyond what is listed above.
+                    </p>
+                </div>
+
+                <hr class="divider-line">
+
+                <!-- 4. HOW WE STORE IT -->
+                <div class="privacy-section" id="store">
+                    <h2><span class="section-num">4</span> How We Store Your Data</h2>
+                    <p>
+                        Oncocare stores all data in a local SQLite database on the server
+                        where the application is hosted. As a college project, this runs
+                        on a development or demonstration server.
+                    </p>
+                    <p>
+                        Passwords are never stored in plain text. Django's built-in
+                        authentication system hashes all passwords before storing them,
+                        meaning even the developers cannot see your password.
+                    </p>
+                    <p>
+                        Uploaded lab report files are stored in the server's media folder
+                        and are accessible only when you are logged in to your account.
+                    </p>
+                </div>
+
+                <hr class="divider-line">
+
+                <!-- 5. SHARING -->
+                <div class="privacy-section" id="share">
+                    <h2><span class="section-num">5</span> Sharing Your Data</h2>
+                    <p>
+                        <strong style="color:var(--navy);">We do not share, sell, rent, or trade your personal or health data with anyone.</strong>
+                    </p>
+                    <p>
+                        Your health information is visible only to you when you are
+                        logged in to your account. No other user can see your data.
+                        No third-party companies, advertisers, or data brokers have
+                        access to your information.
+                    </p>
+                    <p>
+                        The only exception would be if we were legally required to
+                        disclose information by a court order or applicable law, which
+                        is extremely unlikely given the nature of this project.
+                    </p>
+                </div>
+
+                <hr class="divider-line">
+
+                <!-- 6. YOUR RIGHTS -->
+                <div class="privacy-section" id="rights">
+                    <h2><span class="section-num">6</span> Your Rights</h2>
+                    <p>You have full control over your data on Oncocare:</p>
+                    <ul>
+                        <li><strong>Access</strong> — You can view all your data at any time by logging in</li>
+                        <li><strong>Edit</strong> — You can update or correct any information you have entered</li>
+                        <li><strong>Delete</strong> — You can delete individual records (appointments, medications, readings etc.) at any time</li>
+                        <li><strong>Account deletion</strong> — You can request your entire account and all associated data to be deleted by contacting us</li>
+                    </ul>
+                </div>
+
+                <hr class="divider-line">
+
+                <!-- 7. COOKIES -->
+                <div class="privacy-section" id="cookies">
+                    <h2><span class="section-num">7</span> Cookies</h2>
+                    <p>
+                        Oncocare uses a minimal number of cookies strictly necessary
+                        for the application to function:
+                    </p>
+                    <ul>
+                        <li><strong>Session cookie</strong> — keeps you logged in while you use the site</li>
+                        <li><strong>CSRF token</strong> — protects your account from cross-site request forgery attacks</li>
+                    </ul>
+                    <p>
+                        We do not use tracking cookies, analytics cookies, advertising
+                        cookies, or any third-party cookies. No cookie consent banner
+                        is needed because we only use essential cookies.
+                    </p>
+                </div>
+
+                <hr class="divider-line">
+
+                <!-- 8. CHILDREN -->
+                <div class="privacy-section" id="children">
+                    <h2><span class="section-num">8</span> Children</h2>
+                    <p>
+                        Oncocare is intended for adult cancer patients and their caregivers.
+                        We do not knowingly collect personal information from anyone under
+                        the age of 18. If you believe a minor has created an account,
+                        please contact us and we will delete the account promptly.
+                    </p>
+                </div>
+
+                <hr class="divider-line">
+
+                <!-- 9. CHANGES -->
+                <div class="privacy-section" id="changes">
+                    <h2><span class="section-num">9</span> Changes to This Policy</h2>
+                    <p>
+                        As Oncocare develops, this Privacy Policy may be updated. Any
+                        significant changes will be reflected with an updated date at
+                        the top of this page. We encourage you to review this page
+                        periodically.
+                    </p>
+                    <p>
+                        Continuing to use Oncocare after changes are posted means you
+                        accept the updated policy.
+                    </p>
+                </div>
+
+                <hr class="divider-line">
+
+                <!-- 10. IMPORTANT NOTE -->
+                <div class="privacy-section" id="contact">
+                    <h2><span class="section-num">10</span> Important Note</h2>
+                    <p>
+                        Oncocare is a <strong style="color:var(--navy);">college internship project</strong> built
+                        for educational purposes. It is not a certified medical device or
+                        a HIPAA-compliant platform. Please do not use it as your sole
+                        method of managing critical medical information.
+                    </p>
+                    <p>
+                        Always follow the advice of your oncologist and medical team.
+                        Oncocare is a companion tool to help you stay organized — not
+                        a replacement for professional medical care.
+                    </p>
+                </div>
+
+                <!-- CONTACT CARD -->
+                <div class="contact-card" id="contact-section">
+                    <i class="bi bi-envelope-heart"></i>
+                    <h4>Questions about your privacy?</h4>
+                    <p>
+                        If you have any questions about this Privacy Policy or how
+                        your data is handled, feel free to reach out. This project
+                        was built with care and we take your privacy seriously.
+                    </p>
+                    <a href="mailto:oncocare@example.com">
+                        <i class="bi bi-envelope"></i> Contact Us
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <div class="container">
+        <div class="footer-bottom">
+            <div class="footer-brand">Onco<span>care</span></div>
+            <div class="footer-links">
+                <a href="/">Home</a>
+                <a href="/#about">About</a>
+                <a href="/privacy/">Privacy Policy</a>
+                <a href="/accounts/login/">Login</a>
+            </div>
+        </div>
+        <hr style="border-color:rgba(255,255,255,0.07); margin:1.2rem 0;">
+        <p style="font-size:0.78rem; color:rgba(255,255,255,0.28); margin:0;">
+            © 2025 Oncocare. Built as a Django internship project by Shreena.
+        </p>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block title %}Log Reading{% endblock %}
+{% block nav_biomarkers %}active{% endblock %}
+{% block page_title %}Log Blood Test Results{% endblock %}
+{% block page_subtitle %}{{ profile.cancer_type.cancer_name }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+        <div class="page-card">
+            <div class="page-card-header">
+                <h5><i class="bi bi-graph-up-arrow"></i> Enter Reading</h5>
+            </div>
+            <div class="page-card-body">
+                <div style="background:var(--teal-pale);border-radius:var(--radius);padding:0.9rem 1rem;margin-bottom:1.5rem;font-size:0.85rem;color:var(--teal);">
+                    <i class="bi bi-info-circle"></i>
+                    Log this after you receive your blood test results. Enter the date of the test and the values from your report.
+                </div>
+                <form method="POST" class="styled-form">
+                    {% csrf_token %}
+                    {% for field in form %}
+                    <div class="form-group">
+                        <label>{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.errors %}<div style="color:#dc2626;font-size:0.78rem;margin-top:0.3rem;">{{ field.errors.0 }}</div>{% endif %}
+                    </div>
+                    {% endfor %}
+                    <div class="d-flex gap-2 mt-3">
+                        <button type="submit" class="btn-teal"><i class="bi bi-check-lg"></i> Save Reading</button>
+                        <a href="{% url 'biomarker_readings' profile.pk %}" class="btn-outline-teal"><i class="bi bi-x"></i> Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

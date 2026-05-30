@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+{% block title %}Biomarker Charts{% endblock %}
+{% block nav_biomarkers %}active{% endblock %}
+{% block page_title %}{{ profile.cancer_type.cancer_name }} — Trends{% endblock %}
+{% block page_subtitle %}Your biomarker readings over time{% endblock %}
+
+{% block extra_style %}
+.chart-card { background:white; border-radius:var(--radius-lg); box-shadow:var(--shadow-sm); border:1px solid rgba(0,0,0,0.04); overflow:hidden; margin-bottom:1.5rem; }
+.chart-header { padding:1.1rem 1.5rem; border-bottom:1px solid var(--border); display:flex; align-items:flex-start; justify-content:space-between; gap:1rem; }
+.chart-header h6 { font-weight:700; color:var(--navy); margin:0 0 0.25rem; font-size:0.95rem; }
+.chart-header .guidance { font-size:0.8rem; color:var(--muted); }
+.trend-badge { padding:0.25rem 0.7rem; border-radius:50px; font-size:0.75rem; font-weight:600; white-space:nowrap; }
+.trend-decrease { background:#e8f8ee; color:#16a34a; }
+.trend-normalize { background:#e8f0ff; color:#2563eb; }
+.trend-suppress  { background:var(--teal-pale); color:var(--teal); }
+.chart-body { padding:1.5rem; }
+{% endblock %}
+
+{% block content %}
+
+<!-- BACK + ADD BUTTON -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <a href="{% url 'cancer_profile_list' %}" style="color:var(--muted);text-decoration:none;font-size:0.875rem;">
+        <i class="bi bi-arrow-left"></i> Back to Profiles
+    </a>
+    <a href="{% url 'biomarker_add' profile.pk %}" class="btn-teal">
+        <i class="bi bi-plus-lg"></i> Log Blood Test Results
+    </a>
+</div>
+
+<!-- CHARTS -->
+{% for marker in chart_data %}
+<div class="chart-card">
+    <div class="chart-header">
+        <div>
+            <h6>{{ marker.marker_name }} <span style="color:var(--muted);font-weight:400;">({{ marker.unit }})</span></h6>
+            <div class="guidance"><i class="bi bi-info-circle"></i> {{ marker.guidance_text }}</div>
+        </div>
+        <span class="trend-badge
+            {% if marker.expected_trend == 'decrease' %}trend-decrease
+            {% elif marker.expected_trend == 'normalize' %}trend-normalize
+            {% else %}trend-suppress{% endif %}">
+            {% if marker.expected_trend == 'decrease' %}↓ Should decrease
+            {% elif marker.expected_trend == 'normalize' %}↔ Should normalize
+            {% else %}↓ Keep suppressed{% endif %}
+        </span>
+    </div>
+    <div class="chart-body">
+        {% if marker.values %}
+        <canvas id="chart_{{ forloop.counter }}" style="max-height:250px;"></canvas>
+        <script>
+        new Chart(document.getElementById('chart_{{ forloop.counter }}'), {
+            type: 'line',
+            data: {
+                labels: {{ marker.dates|safe }},
+                datasets: [{
+                    label: '{{ marker.marker_name }} ({{ marker.unit }})',
+                    data: {{ marker.values|safe }},
+                    borderColor: '#0a7c7c',
+                    backgroundColor: 'rgba(10,124,124,0.08)',
+                    borderWidth: 2.5,
+                    pointBackgroundColor: '#0a7c7c',
+                    pointRadius: 5,
+                    pointHoverRadius: 7,
+                    tension: 0.3,
+                    fill: true,
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: { callbacks: { label: ctx => ctx.parsed.y + ' {{ marker.unit }}' } }
+                },
+                scales: {
+                    y: { beginAtZero: false, grid: { color: 'rgba(0,0,0,0.04)' } },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+        </script>
+        {% else %}
+        <div class="empty-state" style="padding:1.5rem;">
+            <i class="bi bi-graph-up" style="font-size:2rem;"></i>
+            <p>No readings yet for this marker.<br>
+            <a href="{% url 'biomarker_add' profile.pk %}" style="color:var(--teal);">Log your first reading</a></p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endfor %}
+
+<!-- ALL READINGS TABLE -->
+<div class="page-card">
+    <div class="page-card-header">
+        <h5><i class="bi bi-table"></i> All Readings</h5>
+    </div>
+    <div class="page-card-body" style="padding:0;">
+        {% if readings %}
+        <div class="table-responsive">
+            <table class="styled-table">
+                <thead>
+                    <tr><th>Marker</th><th>Value</th><th>Unit</th><th>Date</th><th>Notes</th><th>Actions</th></tr>
+                </thead>
+                <tbody>
+                    {% for r in readings %}
+                    <tr>
+                        <td><strong>{{ r.marker.marker_name }}</strong></td>
+                        <td>{{ r.value }}</td>
+                        <td style="color:var(--muted);">{{ r.marker.unit }}</td>
+                        <td>{{ r.reading_date|date:"d M Y" }}</td>
+                        <td>{{ r.notes|default:"—" }}</td>
+                        <td>
+                            <a href="{% url 'biomarker_delete' r.pk %}" class="tbl-action tbl-delete"><i class="bi bi-trash"></i> Delete</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <i class="bi bi-table"></i>
+            <p>No readings logged yet.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

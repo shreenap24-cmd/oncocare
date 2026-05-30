@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}Delete Profile{% endblock %}
+{% block nav_biomarkers %}active{% endblock %}
+{% block page_title %}Delete Cancer Profile{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-5">
+        <div class="page-card">
+            <div class="page-card-header">
+                <h5><i class="bi bi-trash" style="color:#dc2626;"></i> Confirm Delete</h5>
+            </div>
+            <div class="page-card-body text-center">
+                <div style="font-size:3rem;margin-bottom:1rem;">🎗️</div>
+                <p style="font-size:1rem;color:var(--text);margin-bottom:0.5rem;">Are you sure you want to delete</p>
+                <p style="font-size:1.1rem;font-weight:700;color:var(--navy);margin-bottom:0.5rem;">{{ profile.cancer_type.cancer_name }}</p>
+                <p style="color:#dc2626;font-size:0.82rem;margin-bottom:2rem;background:#fff0f0;padding:0.6rem;border-radius:8px;">
+                    <i class="bi bi-exclamation-triangle"></i>
+                    This will also delete ALL biomarker readings for this profile.
+                </p>
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="d-flex justify-content-center gap-2">
+                        <button type="submit" class="btn-danger-soft"><i class="bi bi-trash"></i> Yes, Delete</button>
+                        <a href="{% url 'cancer_profile_list' %}" class="btn-outline-teal"><i class="bi bi-arrow-left"></i> Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

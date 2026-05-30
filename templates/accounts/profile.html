@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block title %}My Profile{% endblock %}
+{% block nav_profile %}active{% endblock %}
+{% block page_title %}My Profile{% endblock %}
+{% block page_subtitle %}Manage your personal details{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+
+    <!-- ACCOUNT INFO CARD -->
+    <div class="col-lg-4">
+        <div class="page-card">
+            <div class="page-card-body text-center">
+                <div style="width:80px;height:80px;background:linear-gradient(135deg,var(--teal),var(--navy));border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:2rem;color:white;">
+                    <i class="bi bi-person"></i>
+                </div>
+                <a href="{% url 'password_change' %}" class="btn-outline-teal" style="width:100%;justify-content:center;margin-top:0.5rem;">
+    <i class="bi bi-shield-lock"></i> Change Password
+</a>
+                <h5 style="font-family:'Playfair Display',serif;color:var(--navy);margin-bottom:0.25rem;">{{ request.user.username }}</h5>
+                <p style="color:var(--muted);font-size:0.875rem;margin-bottom:1.5rem;">{{ request.user.email }}</p>
+                <div style="background:var(--teal-pale);border-radius:12px;padding:0.75rem 1rem;text-align:left;font-size:0.82rem;color:var(--teal);">
+                    <div style="font-weight:600;margin-bottom:0.25rem;">Account Status</div>
+                    <div><i class="bi bi-circle-fill" style="font-size:0.5rem;color:#16a34a;"></i> Active Patient</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PROFILE FORM -->
+    <div class="col-lg-8">
+        <div class="page-card">
+            <div class="page-card-header">
+                <h5><i class="bi bi-person-gear"></i> Update Profile</h5>
+            </div>
+            <div class="page-card-body">
+                <form method="POST" class="styled-form">
+                    {% csrf_token %}
+                    <div class="row g-3">
+                        {% for field in form %}
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>{{ field.label }}</label>
+                                {{ field }}
+                                {% if field.errors %}<div style="color:#dc2626;font-size:0.78rem;margin-top:0.3rem;">{{ field.errors.0 }}</div>{% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="d-flex gap-2 mt-2">
+                        <button type="submit" class="btn-teal"><i class="bi bi-check-lg"></i> Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block title %}Biomarkers{% endblock %}
+{% block nav_biomarkers %}active{% endblock %}
+{% block page_title %}My Cancer Profiles{% endblock %}
+{% block page_subtitle %}Manage your cancer-specific biomarker tracking{% endblock %}
+
+{% block extra_style %}
+.profile-card { background:white; border-radius:var(--radius-lg); box-shadow:var(--shadow-sm); border:1px solid rgba(0,0,0,0.04); overflow:hidden; transition:transform 0.2s,box-shadow 0.2s; }
+.profile-card:hover { transform:translateY(-3px); box-shadow:var(--shadow-md); }
+.profile-header { background:linear-gradient(135deg,var(--navy),#0d3d5c); padding:1.4rem 1.5rem; }
+.profile-header h6 { color:white; font-size:1rem; font-weight:600; margin:0 0 0.25rem; display:flex; align-items:center; gap:0.5rem; }
+.profile-header small { color:rgba(255,255,255,0.5); font-size:0.75rem; }
+.profile-body { padding:1.2rem 1.5rem; }
+.marker-chip { display:inline-block; background:var(--teal-pale); color:var(--teal); padding:0.25rem 0.7rem; border-radius:50px; font-size:0.75rem; font-weight:500; margin:0.2rem; }
+.profile-actions { display:flex; gap:0.5rem; margin-top:1rem; padding-top:1rem; border-top:1px solid var(--border); }
+{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <p style="color:var(--muted);font-size:0.875rem;margin:0;">Each cancer type tracks its own specific biomarkers automatically.</p>
+    </div>
+    <a href="{% url 'cancer_profile_add' %}" class="btn-teal"><i class="bi bi-plus-lg"></i> Add Cancer Profile</a>
+</div>
+
+{% if profiles %}
+<div class="row g-3">
+    {% for profile in profiles %}
+    <div class="col-md-6 col-lg-4">
+        <div class="profile-card">
+            <div class="profile-header">
+                <h6><i class="bi bi-graph-up-arrow"></i> {{ profile.cancer_type.cancer_name }}</h6>
+                <small>Diagnosed: {{ profile.diagnosis_date|date:"d M Y" }}</small>
+            </div>
+            <div class="profile-body">
+                <div style="font-size:0.78rem;color:var(--muted);margin-bottom:0.6rem;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">Tracking Markers</div>
+                {% for marker in profile.cancer_type.markers.all %}
+                <span class="marker-chip">{{ marker.marker_name }}</span>
+                {% endfor %}
+                {% if profile.notes %}
+                <p style="font-size:0.82rem;color:var(--muted);margin-top:0.75rem;">{{ profile.notes }}</p>
+                {% endif %}
+                <div class="profile-actions">
+                    <a href="{% url 'biomarker_readings' profile.pk %}" class="btn-teal" style="flex:1;justify-content:center;">
+                        <i class="bi bi-graph-up-arrow"></i> View Charts
+                    </a>
+                    <a href="{% url 'cancer_profile_delete' profile.pk %}" class="btn-danger-soft">
+                        <i class="bi bi-trash"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="page-card">
+    <div class="page-card-body">
+        <div class="empty-state">
+            <i class="bi bi-graph-up-arrow"></i>
+            <p>No cancer profiles yet.<br>
+            <a href="{% url 'cancer_profile_add' %}" style="color:var(--teal);">Add your first cancer profile</a> to start tracking biomarkers.</p>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

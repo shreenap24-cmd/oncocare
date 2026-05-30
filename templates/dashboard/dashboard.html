@@ -1,0 +1,763 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block nav_dashboard %}active{% endblock %}
+{% block page_title %}Good to see you, {{ request.user.username }} 👋{% endblock %}
+{% block page_subtitle %}Here is your health summary for today{% endblock %}
+
+{% block extra_style %}
+
+/* ── BUTTONS ── */
+.btn-teal {
+    background: var(--teal);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 0.5rem 1.1rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: background 0.2s;
+}
+
+.btn-teal:hover {
+    background: var(--teal-light);
+    color: white;
+}
+
+.btn-outline-teal {
+    background: transparent;
+    color: var(--teal);
+    border: 1.5px solid var(--teal);
+    border-radius: 10px;
+    padding: 0.5rem 1.1rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: all 0.2s;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+}
+
+.btn-outline-teal:hover {
+    background: var(--teal);
+    color: white;
+}
+
+/* ── DONE BUTTON ── */
+.done-btn {
+    background: var(--teal-pale);
+    color: var(--teal);
+    border: none;
+    border-radius: 50px;
+    padding: 0.2rem 0.65rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.done-btn:hover {
+    background: var(--teal);
+    color: white;
+}
+
+/* ── STAT CARDS ── */
+.stat-card {
+    background: white;
+    border-radius: 16px;
+    padding: 1.4rem;
+    display: flex;
+    align-items: center;
+    gap: 1.1rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    border: 1px solid rgba(0,0,0,0.04);
+    transition: transform 0.2s, box-shadow 0.2s;
+    text-decoration: none;
+    color: inherit;
+}
+
+.stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    color: inherit;
+}
+
+.stat-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    flex-shrink: 0;
+}
+
+.si-teal   { background: var(--teal-pale); color: var(--teal); }
+.si-orange { background: #fff0e8; color: var(--accent); }
+.si-purple { background: #f0eaff; color: #7c3aed; }
+.si-green  { background: #e8f8ee; color: #16a34a; }
+.si-blue   { background: #e8f0ff; color: #2563eb; }
+
+.stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.9rem;
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1;
+}
+
+.stat-lbl {
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-top: 0.15rem;
+}
+
+/* ── DASH CARDS ── */
+.dash-card {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    border: 1px solid rgba(0,0,0,0.04);
+    overflow: hidden;
+}
+
+.dc-header {
+    padding: 1.1rem 1.5rem;
+    border-bottom: 1px solid #f0f4f8;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.dc-header h6 {
+    font-weight: 600;
+    color: var(--navy);
+    margin: 0;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+}
+
+.dc-header h6 i {
+    color: var(--teal);
+}
+
+.dc-header a {
+    font-size: 0.78rem;
+    color: var(--teal);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.dc-header a:hover {
+    text-decoration: underline;
+}
+
+.dc-body {
+    padding: 1.1rem 1.5rem;
+}
+
+/* ── APPOINTMENTS ── */
+.appt-row {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    padding: 0.8rem 0;
+    border-bottom: 1px solid #f5f8fa;
+}
+
+.appt-row:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.appt-box {
+    background: var(--teal-pale);
+    border-radius: 10px;
+    padding: 0.45rem 0.75rem;
+    text-align: center;
+    min-width: 48px;
+}
+
+.appt-day {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--teal);
+    line-height: 1;
+}
+
+.appt-mon {
+    font-size: 0.65rem;
+    color: var(--teal);
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.appt-doc  { font-size: 0.85rem; font-weight: 600; color: var(--text); }
+.appt-hosp { font-size: 0.75rem; color: var(--muted); }
+
+.appt-time {
+    margin-left: auto;
+    font-size: 0.75rem;
+    color: var(--muted);
+    text-align: right;
+    white-space: nowrap;
+}
+
+/* ── MEDICATIONS ── */
+.med-row {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #f5f8fa;
+}
+
+.med-row:last-child {
+    border-bottom: none;
+}
+
+.med-ico {
+    width: 36px;
+    height: 36px;
+    background: #fff0e8;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent);
+    font-size: 0.95rem;
+    flex-shrink: 0;
+}
+
+.med-name { font-size: 0.85rem; font-weight: 600; color: var(--text); }
+.med-dose { font-size: 0.73rem; color: var(--muted); }
+
+.med-freq {
+    margin-left: auto;
+    font-size: 0.73rem;
+    color: var(--teal);
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+/* ── TREATMENTS ── */
+.tx-row {
+    padding: 0.85rem 0;
+    border-bottom: 1px solid #f5f8fa;
+}
+
+.tx-row:last-child {
+    border-bottom: none;
+}
+
+.tx-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+
+.tx-name { font-size: 0.85rem; font-weight: 600; color: var(--text); }
+.tx-sub  { font-size: 0.73rem; color: var(--muted); }
+
+.prog-bar {
+    height: 7px;
+    border-radius: 50px;
+    background: #f0f4f8;
+    overflow: hidden;
+}
+
+.prog-fill {
+    height: 100%;
+    border-radius: 50px;
+    background: linear-gradient(90deg, var(--teal), var(--teal-light));
+}
+
+/* ── SYMPTOMS ── */
+.sym-row {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #f5f8fa;
+}
+
+.sym-row:last-child {
+    border-bottom: none;
+}
+
+.sym-name {
+    font-size: 0.84rem;
+    font-weight: 500;
+    color: var(--text);
+    min-width: 90px;
+}
+
+.sev-bar {
+    flex: 1;
+    height: 6px;
+    background: #f0f4f8;
+    border-radius: 50px;
+    overflow: hidden;
+}
+
+.sev-fill {
+    height: 100%;
+    border-radius: 50px;
+    background: linear-gradient(90deg, #16a34a, #f59e0b, #dc2626);
+}
+
+.sev-num {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--muted);
+    min-width: 32px;
+    text-align: right;
+}
+
+/* ── BIOMARKERS ── */
+.bm-card {
+    background: linear-gradient(135deg, var(--navy) 0%, #0d3d5c 100%);
+    border-radius: 16px;
+    padding: 1.4rem;
+    color: white;
+}
+
+.bm-title {
+    font-size: 0.88rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+}
+
+.bm-sub {
+    font-size: 0.73rem;
+    color: rgba(255,255,255,0.45);
+}
+
+.bm-marker {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0.6rem;
+}
+
+.bm-mname {
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.65);
+}
+
+.bm-pill {
+    background: rgba(22,163,74,0.2);
+    color: #4ade80;
+    padding: 0.2rem 0.6rem;
+    border-radius: 50px;
+    font-size: 0.72rem;
+    font-weight: 600;
+}
+
+.bm-link {
+    display: inline-block;
+    margin-top: 1rem;
+    font-size: 0.78rem;
+    color: var(--teal-light);
+    text-decoration: none;
+}
+
+.bm-link:hover {
+    color: white;
+}
+
+/* ── EMPTY STATE ── */
+.empty-state {
+    text-align: center;
+    padding: 2rem 1rem;
+    color: var(--muted);
+}
+
+.empty-state i {
+    font-size: 2.5rem;
+    opacity: 0.25;
+    display: block;
+    margin-bottom: 0.75rem;
+}
+
+.empty-state p {
+    font-size: 0.85rem;
+    margin: 0;
+}
+
+/* ── GETTING STARTED CARD ── */
+.getting-started-card {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    border: 1px solid rgba(0,0,0,0.04);
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+}
+
+.getting-started-card-body {
+    padding: 1.8rem 1.5rem;
+}
+
+.gs-step {
+    background: var(--cream);
+    border-radius: 14px;
+    padding: 1.2rem;
+    text-align: center;
+    border: 1px solid rgba(0,0,0,0.04);
+    transition: transform 0.2s, box-shadow 0.2s;
+    text-decoration: none;
+    display: block;
+    height: 100%;
+}
+
+.gs-step:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.07);
+}
+
+.gs-step i {
+    font-size: 1.8rem;
+    color: var(--teal);
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.gs-step-title {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--navy);
+}
+
+.gs-step-sub {
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-top: 0.25rem;
+}
+
+{% endblock %}
+
+{% block content %}
+
+<!-- PROFILE COMPLETION BANNER -->
+{% if not patient.phone and not patient.date_of_birth %}
+<div style="background: var(--teal-pale); border-left: 3px solid var(--teal); border-radius: 0 12px 12px 0; padding: 0.9rem 1.2rem; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
+    <div>
+        <div style="font-size: 0.88rem; font-weight: 600; color: var(--teal);">
+            <i class="bi bi-person-check"></i> Complete your profile
+        </div>
+        <div style="font-size: 0.82rem; color: var(--muted);">
+            Add your details and cancer type to get the most out of Oncocare.
+        </div>
+    </div>
+    <a href="/accounts/profile/" class="btn-teal" style="font-size: 0.82rem;">
+        Complete Profile →
+    </a>
+</div>
+{% endif %}
+
+<!-- GETTING STARTED CARD — only shown when account has no data -->
+{% if is_new_user %}
+<div class="getting-started-card">
+    <div class="getting-started-card-body">
+        <div style="text-align: center; padding: 0.5rem 0 1.5rem;">
+            <div style="font-size: 2.5rem; margin-bottom: 0.75rem;">🎗️</div>
+            <h5 style="font-family: 'Playfair Display', serif; color: var(--navy); margin-bottom: 0.4rem;">
+                Welcome to Oncocare!
+            </h5>
+            <p style="color: var(--muted); font-size: 0.875rem; max-width: 480px; margin: 0 auto;">
+                You are all set. Follow these steps to get started.
+            </p>
+        </div>
+        <div class="row g-3">
+            <div class="col-6 col-md-3">
+                <a href="/accounts/profile/" class="gs-step">
+                    <i class="bi bi-person-circle"></i>
+                    <div class="gs-step-title">1. Complete Profile</div>
+                    <div class="gs-step-sub">Add your details</div>
+                </a>
+            </div>
+            <div class="col-6 col-md-3">
+                <a href="/biomarkers/add/" class="gs-step">
+                    <i class="bi bi-graph-up-arrow"></i>
+                    <div class="gs-step-title">2. Add Cancer Profile</div>
+                    <div class="gs-step-sub">Select your cancer type</div>
+                </a>
+            </div>
+            <div class="col-6 col-md-3">
+                <a href="/appointments/add/" class="gs-step">
+                    <i class="bi bi-calendar2-heart"></i>
+                    <div class="gs-step-title">3. Add Appointment</div>
+                    <div class="gs-step-sub">Log your next visit</div>
+                </a>
+            </div>
+            <div class="col-6 col-md-3">
+                <a href="/medications/add/" class="gs-step">
+                    <i class="bi bi-capsule"></i>
+                    <div class="gs-step-title">4. Add Medication</div>
+                    <div class="gs-step-sub">Track your medicines</div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- PDF / PRINT BUTTONS -->
+<div class="d-flex justify-content-end gap-2 mb-3">
+    <a href="{% url 'export_pdf' %}" class="btn-outline-teal">
+        <i class="bi bi-file-earmark-pdf"></i> Download PDF Summary
+    </a>
+    <button onclick="window.print()" class="btn-outline-teal">
+        <i class="bi bi-printer"></i> Print
+    </button>
+</div>
+
+<!-- STAT CARDS -->
+<div class="row g-3 mb-4">
+    <div class="col-6 col-xl">
+        <a href="/appointments/" class="stat-card">
+            <div class="stat-icon si-teal"><i class="bi bi-calendar2-heart"></i></div>
+            <div>
+                <div class="stat-num">{{ total_appointments }}</div>
+                <div class="stat-lbl">Appointments</div>
+            </div>
+        </a>
+    </div>
+    <div class="col-6 col-xl">
+        <a href="/medications/" class="stat-card">
+            <div class="stat-icon si-orange"><i class="bi bi-capsule"></i></div>
+            <div>
+                <div class="stat-num">{{ total_medications }}</div>
+                <div class="stat-lbl">Medications</div>
+            </div>
+        </a>
+    </div>
+    <div class="col-6 col-xl">
+        <a href="/treatments/" class="stat-card">
+            <div class="stat-icon si-purple"><i class="bi bi-activity"></i></div>
+            <div>
+                <div class="stat-num">{{ total_treatments }}</div>
+                <div class="stat-lbl">Treatments</div>
+            </div>
+        </a>
+    </div>
+    <div class="col-6 col-xl">
+        <a href="/symptoms/" class="stat-card">
+            <div class="stat-icon si-green"><i class="bi bi-journal-heart"></i></div>
+            <div>
+                <div class="stat-num">{{ total_symptoms }}</div>
+                <div class="stat-lbl">Symptoms</div>
+            </div>
+        </a>
+    </div>
+    <div class="col-6 col-xl">
+        <a href="/reports/" class="stat-card">
+            <div class="stat-icon si-blue"><i class="bi bi-file-earmark-medical"></i></div>
+            <div>
+                <div class="stat-num">{{ total_reports }}</div>
+                <div class="stat-lbl">Lab Reports</div>
+            </div>
+        </a>
+    </div>
+</div>
+
+<!-- ROW 2: APPOINTMENTS + MEDICATIONS -->
+<div class="row g-3 mb-3">
+    <div class="col-lg-7">
+        <div class="dash-card h-100">
+            <div class="dc-header">
+                <h6><i class="bi bi-calendar2-heart"></i> Upcoming Appointments</h6>
+                <a href="/appointments/add/">+ Add New</a>
+            </div>
+            <div class="dc-body">
+                {% if upcoming_appointments %}
+                    {% for a in upcoming_appointments %}
+                    <div class="appt-row">
+                        <div class="appt-box">
+                            <div class="appt-day">{{ a.appointment_date|date:"d" }}</div>
+                            <div class="appt-mon">{{ a.appointment_date|date:"M" }}</div>
+                        </div>
+                        <div>
+                            <div class="appt-doc">{{ a.doctor_name }}</div>
+                            <div class="appt-hosp">{{ a.hospital_name }}</div>
+                        </div>
+                        <div class="appt-time">
+                            {{ a.appointment_time|time:"g:i A" }}
+                            <form method="POST" action="{% url 'appointment_mark_complete' a.pk %}" style="margin-top: 0.3rem;">
+                                {% csrf_token %}
+                                <button type="submit" class="done-btn">✓ Done</button>
+                            </form>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="empty-state">
+                        <i class="bi bi-calendar-x"></i>
+                        <p>No upcoming appointments.<br>
+                        <a href="/appointments/add/" style="color: var(--teal);">Add one now</a></p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-5">
+        <div class="dash-card h-100">
+            <div class="dc-header">
+                <h6><i class="bi bi-capsule"></i> Active Medications</h6>
+                <a href="/medications/add/">+ Add New</a>
+            </div>
+            <div class="dc-body">
+                {% if active_medications %}
+                    {% for m in active_medications %}
+                    <div class="med-row">
+                        <div class="med-ico"><i class="bi bi-capsule"></i></div>
+                        <div>
+                            <div class="med-name">{{ m.medicine_name }}</div>
+                            <div class="med-dose">{{ m.dosage }}</div>
+                        </div>
+                        <div class="med-freq">{{ m.get_frequency_display }}</div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="empty-state">
+                        <i class="bi bi-capsule"></i>
+                        <p>No active medications.<br>
+                        <a href="/medications/add/" style="color: var(--teal);">Add one now</a></p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ROW 3: TREATMENTS + SYMPTOMS -->
+<div class="row g-3 mb-3">
+    <div class="col-lg-6">
+        <div class="dash-card h-100">
+            <div class="dc-header">
+                <h6><i class="bi bi-activity"></i> Ongoing Treatments</h6>
+                <a href="/treatments/add/">+ Add New</a>
+            </div>
+            <div class="dc-body">
+                {% if ongoing_treatments %}
+                    {% for t in ongoing_treatments %}
+                    <div class="tx-row">
+                        <div class="tx-top">
+                            <div>
+                                <div class="tx-name">{{ t.treatment_name }}</div>
+                                <div class="tx-sub">{{ t.get_treatment_type_display }}</div>
+                            </div>
+                            {% if t.total_cycles %}
+                            <div class="tx-sub">{{ t.cycles_completed }}/{{ t.total_cycles }} cycles</div>
+                            {% endif %}
+                        </div>
+                        {% if t.total_cycles %}
+                        <div class="prog-bar">
+                            <div class="prog-fill" style="width: {% widthratio t.cycles_completed t.total_cycles 100 %}%;"></div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="empty-state">
+                        <i class="bi bi-activity"></i>
+                        <p>No ongoing treatments.<br>
+                        <a href="/treatments/add/" style="color: var(--teal);">Add one now</a></p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="dash-card h-100">
+            <div class="dc-header">
+                <h6><i class="bi bi-journal-heart"></i> Recent Symptoms</h6>
+                <a href="/symptoms/add/">+ Log New</a>
+            </div>
+            <div class="dc-body">
+                {% if recent_symptoms %}
+                    {% for s in recent_symptoms %}
+                    <div class="sym-row">
+                        <div class="sym-name">{{ s.symptom_name }}</div>
+                        <div class="sev-bar">
+                            <div class="sev-fill" style="width: {% widthratio s.severity 10 100 %}%;"></div>
+                        </div>
+                        <div class="sev-num">{{ s.severity }}/10</div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="empty-state">
+                        <i class="bi bi-journal-heart"></i>
+                        <p>No symptoms logged.<br>
+                        <a href="/symptoms/add/" style="color: var(--teal);">Log one now</a></p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ROW 4: BIOMARKERS -->
+<div class="row g-3">
+    <div class="col-12">
+        <div class="dash-card">
+            <div class="dc-header">
+                <h6><i class="bi bi-graph-up-arrow"></i> Biomarker Trends</h6>
+                <a href="/biomarkers/">View All →</a>
+            </div>
+            <div class="dc-body">
+                {% if cancer_profiles %}
+                <div class="row g-3">
+                    {% for profile in cancer_profiles %}
+                    <div class="col-md-6 col-lg-4">
+                        <div class="bm-card">
+                            <div class="bm-title">
+                                <i class="bi bi-graph-up-arrow"></i>
+                                {{ profile.cancer_type.cancer_name }}
+                            </div>
+                            <div class="bm-sub">Diagnosed: {{ profile.diagnosis_date }}</div>
+                            {% for marker in profile.cancer_type.markers.all %}
+                            <div class="bm-marker">
+                                <span class="bm-mname">{{ marker.marker_name }}</span>
+                                <span class="bm-pill">
+                                    <i class="bi bi-arrow-down-short"></i> Tracking
+                                </span>
+                            </div>
+                            {% endfor %}
+                            <a href="/biomarkers/{{ profile.pk }}/readings/" class="bm-link">
+                                View full chart →
+                            </a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="empty-state">
+                    <i class="bi bi-graph-up-arrow"></i>
+                    <p>No cancer profiles yet.<br>
+                    <a href="/biomarkers/add/" style="color: var(--teal);">Add your cancer profile</a>
+                    to start tracking biomarkers.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

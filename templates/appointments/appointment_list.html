@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% block title %}Appointments{% endblock %}
+{% block nav_appointments %}active{% endblock %}
+{% block page_title %}My Appointments{% endblock %}
+{% block page_subtitle %}All your doctor visits in one place{% endblock %}
+
+{% block content %}
+
+<!-- FILTER BAR -->
+<div class="page-card mb-3">
+    <div class="page-card-body" style="padding:1rem 1.5rem;">
+        <form method="GET" class="d-flex align-items-center gap-3 flex-wrap">
+            <span style="font-size:0.82rem;font-weight:600;color:var(--muted);">
+                <i class="bi bi-funnel"></i> Filter by status:
+            </span>
+            <a href="{% url 'appointment_list' %}"
+               class="filter-chip {% if not status_filter %}active{% endif %}">
+                All
+            </a>
+            <a href="?status=upcoming"
+               class="filter-chip {% if status_filter == 'upcoming' %}active{% endif %}">
+                Upcoming
+            </a>
+            <a href="?status=completed"
+               class="filter-chip {% if status_filter == 'completed' %}active{% endif %}">
+                Completed
+            </a>
+            <a href="?status=cancelled"
+               class="filter-chip {% if status_filter == 'cancelled' %}active{% endif %}">
+                Cancelled
+            </a>
+            <span class="ms-auto" style="font-size:0.82rem;color:var(--muted);">
+                {{ appointments|length }} result{{ appointments|length|pluralize }}
+            </span>
+        </form>
+    </div>
+</div>
+
+<div class="page-card">
+    <div class="page-card-header">
+        <h5><i class="bi bi-calendar2-heart"></i> Appointments</h5>
+        <a href="{% url 'appointment_add' %}" class="btn-teal">
+            <i class="bi bi-plus-lg"></i> Add Appointment
+        </a>
+    </div>
+    <div class="page-card-body" style="padding:0;">
+        {% if appointments %}
+        <div class="table-responsive">
+            <table class="styled-table">
+                <thead>
+                    <tr>
+                        <th>Doctor</th>
+                        <th>Hospital</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Purpose</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for a in appointments %}
+                    <tr>
+                        <td><strong>{{ a.doctor_name }}</strong></td>
+                        <td>{{ a.hospital_name }}</td>
+                        <td>{{ a.appointment_date|date:"d M Y" }}</td>
+                        <td>{{ a.appointment_time|time:"g:i A" }}</td>
+                        <td>{{ a.purpose|default:"—" }}</td>
+                        <td>
+                            {% if a.status == 'upcoming' %}
+                                <span class="badge-upcoming">Upcoming</span>
+                            {% elif a.status == 'completed' %}
+                                <span class="badge-completed">Completed</span>
+                            {% else %}
+                                <span class="badge-cancelled">Cancelled</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{% url 'appointment_edit' a.pk %}" class="tbl-action tbl-edit">
+                                <i class="bi bi-pencil"></i> Edit
+                            </a>
+                            <a href="{% url 'appointment_delete' a.pk %}" class="tbl-action tbl-delete">
+                                <i class="bi bi-trash"></i> Delete
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <i class="bi bi-calendar-x"></i>
+            <p>No appointments found for this filter.<br>
+            <a href="{% url 'appointment_list' %}" style="color:var(--teal);">Clear filter</a>
+            or <a href="{% url 'appointment_add' %}" style="color:var(--teal);">add a new one</a></p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_style %}
+.filter-chip { display:inline-flex; align-items:center; padding:0.3rem 0.9rem; border-radius:50px; font-size:0.8rem; font-weight:500; text-decoration:none; color:var(--muted); background:#f0f4f8; transition:all 0.2s; }
+.filter-chip:hover { background:var(--teal-pale); color:var(--teal); }
+.filter-chip.active { background:var(--teal); color:white; }
+{% endblock %}

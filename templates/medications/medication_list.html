@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block title %}Medications{% endblock %}
+{% block nav_medications %}active{% endblock %}
+{% block page_title %}My Medications{% endblock %}
+{% block page_subtitle %}All your medicines in one place{% endblock %}
+
+{% block content %}
+<div class="page-card">
+    <div class="page-card-header">
+        <h5><i class="bi bi-capsule"></i> All Medications</h5>
+        <a href="{% url 'medication_add' %}" class="btn-teal"><i class="bi bi-plus-lg"></i> Add Medication</a>
+    </div>
+    <div class="page-card-body" style="padding:0;">
+        {% if medications %}
+        <div class="table-responsive">
+            <table class="styled-table">
+                <thead>
+                    <tr>
+                        <th>Medicine</th><th>Dosage</th><th>Frequency</th>
+                        <th>Start Date</th><th>End Date</th><th>Reminder</th><th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for m in medications %}
+                    <tr>
+                        <td><strong>{{ m.medicine_name }}</strong></td>
+                        <td>{{ m.dosage }}</td>
+                        <td>{{ m.get_frequency_display }}</td>
+                        <td>{{ m.start_date|date:"d M Y" }}</td>
+                        <td>{{ m.end_date|date:"d M Y"|default:"—" }}</td>
+                        <td>{{ m.reminder_time|time:"g:i A"|default:"—" }}</td>
+                        <td>
+                            <a href="{% url 'medication_edit' m.pk %}" class="tbl-action tbl-edit"><i class="bi bi-pencil"></i> Edit</a>
+                            <a href="{% url 'medication_delete' m.pk %}" class="tbl-action tbl-delete"><i class="bi bi-trash"></i> Delete</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <i class="bi bi-capsule"></i>
+            <p>No medications yet.<br><a href="{% url 'medication_add' %}" style="color:var(--teal);">Add your first medication</a></p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

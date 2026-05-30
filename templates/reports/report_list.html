@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block title %}Lab Reports{% endblock %}
+{% block nav_reports %}active{% endblock %}
+{% block page_title %}My Lab Reports{% endblock %}
+{% block page_subtitle %}All your uploaded medical reports{% endblock %}
+
+{% block content %}
+<div class="page-card">
+    <div class="page-card-header">
+        <h5><i class="bi bi-file-earmark-medical"></i> All Lab Reports</h5>
+        <a href="{% url 'report_add' %}" class="btn-teal"><i class="bi bi-upload"></i> Upload Report</a>
+    </div>
+    <div class="page-card-body" style="padding:0;">
+        {% if reports %}
+        <div class="table-responsive">
+            <table class="styled-table">
+                <thead>
+                    <tr><th>Title</th><th>Report Date</th><th>Summary</th><th>Uploaded</th><th>File</th><th>Actions</th></tr>
+                </thead>
+                <tbody>
+                    {% for r in reports %}
+                    <tr>
+                        <td><strong>{{ r.report_title }}</strong></td>
+                        <td>{{ r.report_date|date:"d M Y" }}</td>
+                        <td>{{ r.report_summary|default:"—"|truncatechars:50 }}</td>
+                        <td style="font-size:0.78rem;color:var(--muted);">{{ r.uploaded_at|date:"d M Y" }}</td>
+                        <td>
+                            <a href="{{ r.report_file.url }}" target="_blank" class="tbl-action tbl-view">
+                                <i class="bi bi-eye"></i> View
+                            </a>
+                        </td>
+                        <td>
+                            <a href="{% url 'report_delete' r.pk %}" class="tbl-action tbl-delete"><i class="bi bi-trash"></i> Delete</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <i class="bi bi-file-earmark-medical"></i>
+            <p>No reports uploaded yet.<br><a href="{% url 'report_add' %}" style="color:var(--teal);">Upload your first report</a></p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

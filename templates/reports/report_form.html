@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block title %}Upload Report{% endblock %}
+{% block nav_reports %}active{% endblock %}
+{% block page_title %}Upload Lab Report{% endblock %}
+{% block page_subtitle %}Upload a PDF or image file{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+        <div class="page-card">
+            <div class="page-card-header">
+                <h5><i class="bi bi-file-earmark-medical"></i> Report Details</h5>
+            </div>
+            <div class="page-card-body">
+                <form method="POST" enctype="multipart/form-data" class="styled-form">
+                    {% csrf_token %}
+                    {% for field in form %}
+                    <div class="form-group">
+                        <label>{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.errors %}<div style="color:#dc2626;font-size:0.78rem;margin-top:0.3rem;">{{ field.errors.0 }}</div>{% endif %}
+                    </div>
+                    {% endfor %}
+                    <div style="background:var(--teal-pale);border-radius:var(--radius);padding:0.75rem 1rem;margin-bottom:1rem;font-size:0.82rem;color:var(--teal);">
+                        <i class="bi bi-info-circle"></i> Accepted file types: PDF, JPG, PNG
+                    </div>
+                    <div class="d-flex gap-2 mt-3">
+                        <button type="submit" class="btn-teal"><i class="bi bi-upload"></i> Upload Report</button>
+                        <a href="{% url 'report_list' %}" class="btn-outline-teal"><i class="bi bi-x"></i> Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

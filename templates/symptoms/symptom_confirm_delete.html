@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}Delete Symptom{% endblock %}
+{% block nav_symptoms %}active{% endblock %}
+{% block page_title %}Delete Symptom{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-5">
+        <div class="page-card">
+            <div class="page-card-header">
+                <h5><i class="bi bi-trash" style="color:#dc2626;"></i> Confirm Delete</h5>
+            </div>
+            <div class="page-card-body text-center">
+                <div style="font-size:3rem;margin-bottom:1rem;">📋</div>
+                <p style="font-size:1rem;color:var(--text);margin-bottom:0.5rem;">Delete symptom entry for</p>
+                <p style="font-size:1.1rem;font-weight:700;color:var(--navy);margin-bottom:0.5rem;">{{ symptom.symptom_name }}</p>
+                <p style="color:var(--muted);font-size:0.875rem;margin-bottom:2rem;">logged on {{ symptom.symptom_date|date:"d M Y" }}</p>
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="d-flex justify-content-center gap-2">
+                        <button type="submit" class="btn-danger-soft"><i class="bi bi-trash"></i> Yes, Delete</button>
+                        <a href="{% url 'symptom_list' %}" class="btn-outline-teal"><i class="bi bi-arrow-left"></i> Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

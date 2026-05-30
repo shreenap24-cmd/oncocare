@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oncocare — Cancer Care Companion</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root {
+            --teal:       #0a7c7c;
+            --teal-light: #12a5a5;
+            --teal-pale:  #e6f7f7;
+            --navy:       #0d2b45;
+            --cream:      #faf8f5;
+            --text:       #1a2e3b;
+            --muted:      #6b8190;
+            --accent:     #e8734a;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'DM Sans',sans-serif; background:var(--cream); color:var(--text); overflow-x:hidden; }
+
+        /* NAVBAR */
+        .navbar { background:var(--navy); padding:1rem 0; position:sticky; top:0; z-index:1000; border-bottom:1px solid rgba(255,255,255,0.07); }
+        .navbar-brand { font-family:'Playfair Display',serif; font-size:1.7rem; color:white!important; font-weight:700; }
+        .navbar-brand span { color:var(--teal-light); }
+        .nav-link { font-size:0.9rem; font-weight:500; color:rgba(255,255,255,0.65)!important; margin:0 0.3rem; transition:color 0.2s; }
+        .nav-link:hover { color:white!important; }
+        .btn-nav-login { background:transparent; border:1.5px solid rgba(255,255,255,0.3); color:white; padding:0.4rem 1.2rem; border-radius:50px; font-size:0.88rem; font-weight:500; transition:all 0.25s; text-decoration:none; }
+        .btn-nav-login:hover { border-color:white; color:white; }
+        .btn-nav-signup { background:var(--teal); border:1.5px solid var(--teal); color:white; padding:0.4rem 1.2rem; border-radius:50px; font-size:0.88rem; font-weight:500; transition:all 0.25s; text-decoration:none; }
+        .btn-nav-signup:hover { background:var(--teal-light); color:white; }
+
+        /* HERO */
+        .hero { background:var(--cream); min-height:92vh; display:flex; align-items:center; position:relative; overflow:hidden; padding:4rem 0; }
+        .hero-bg { position:absolute; top:-80px; right:-120px; width:680px; height:680px; background:radial-gradient(circle,rgba(10,124,124,0.07) 0%,transparent 70%); border-radius:50%; pointer-events:none; }
+        .hero-bg2 { position:absolute; bottom:-100px; left:-80px; width:500px; height:500px; background:radial-gradient(circle,rgba(232,115,74,0.05) 0%,transparent 70%); border-radius:50%; pointer-events:none; }
+        .hero-badge { display:inline-flex; align-items:center; gap:0.5rem; background:var(--teal-pale); color:var(--teal); padding:0.4rem 1rem; border-radius:50px; font-size:0.82rem; font-weight:600; letter-spacing:0.5px; text-transform:uppercase; margin-bottom:1.5rem; animation:fadeUp 0.6s ease both; }
+        .hero h1 { font-family:'Playfair Display',serif; font-size:clamp(2.8rem,6vw,4.8rem); font-weight:700; line-height:1.1; color:var(--navy); margin-bottom:1.5rem; animation:fadeUp 0.6s 0.1s ease both; }
+        .hero h1 em { font-style:italic; color:var(--teal); }
+        .hero-sub { font-size:1.1rem; color:var(--muted); line-height:1.75; max-width:520px; margin-bottom:2.5rem; animation:fadeUp 0.6s 0.2s ease both; }
+        .hero-buttons { display:flex; gap:1rem; flex-wrap:wrap; animation:fadeUp 0.6s 0.3s ease both; }
+        .btn-primary-main { background:var(--teal); color:white; padding:0.85rem 2.2rem; border-radius:50px; font-size:0.95rem; font-weight:600; text-decoration:none; display:inline-flex; align-items:center; gap:0.5rem; transition:all 0.25s; box-shadow:0 4px 20px rgba(10,124,124,0.25); }
+        .btn-primary-main:hover { background:var(--teal-light); color:white; transform:translateY(-2px); }
+        .btn-secondary-main { background:transparent; color:var(--text); padding:0.85rem 2.2rem; border-radius:50px; font-size:0.95rem; font-weight:500; text-decoration:none; display:inline-flex; align-items:center; gap:0.5rem; border:1.5px solid rgba(0,0,0,0.15); transition:all 0.25s; }
+        .btn-secondary-main:hover { border-color:var(--teal); color:var(--teal); transform:translateY(-2px); }
+
+        /* HERO CARD */
+        .hero-card { background:white; border-radius:20px; padding:1.8rem; box-shadow:0 20px 60px rgba(0,0,0,0.08); border:1px solid rgba(0,0,0,0.05); max-width:380px; margin:0 auto; animation:fadeUp 0.8s 0.2s ease both; }
+        .hero-card-header { display:flex; align-items:center; gap:0.75rem; margin-bottom:1.4rem; padding-bottom:1rem; border-bottom:1px solid #f0f0f0; }
+        .avatar { width:40px; height:40px; background:var(--teal-pale); border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--teal); font-size:1rem; }
+        .hero-card-header h6 { margin:0; font-size:0.88rem; font-weight:600; color:var(--text); }
+        .hero-card-header small { color:var(--muted); font-size:0.75rem; }
+        .stat-row { display:flex; gap:0.65rem; margin-bottom:1rem; }
+        .stat-box { flex:1; background:var(--cream); border-radius:10px; padding:0.85rem; text-align:center; }
+        .stat-box .num { font-family:'Playfair Display',serif; font-size:1.5rem; font-weight:700; color:var(--teal); line-height:1; }
+        .stat-box .lbl { font-size:0.68rem; color:var(--muted); margin-top:0.2rem; }
+        .mini-appt { background:var(--teal-pale); border-radius:10px; padding:0.7rem 0.9rem; display:flex; align-items:center; gap:0.7rem; margin-bottom:0.6rem; }
+        .mini-appt i { color:var(--teal); }
+        .mini-appt .at { font-size:0.8rem; font-weight:500; color:var(--text); }
+        .mini-appt .ad { font-size:0.72rem; color:var(--muted); }
+        .trend-mini { background:#f0faf0; border-radius:10px; padding:0.7rem 0.9rem; display:flex; align-items:center; justify-content:space-between; }
+        .trend-mini .tl { font-size:0.78rem; font-weight:500; color:var(--text); }
+        .trend-mini .ts { font-size:0.7rem; color:var(--muted); }
+        .trend-mini .tv { font-size:0.78rem; color:#16a34a; font-weight:600; }
+
+        /* STATS STRIP */
+        .stats-strip { background:white; padding:2.5rem 0; border-bottom:1px solid #f0f0f0; }
+        .stat-item { text-align:center; }
+        .stat-num-lg { font-family:'Playfair Display',serif; font-size:2.6rem; font-weight:700; color:var(--navy); display:block; line-height:1; }
+        .stat-desc { font-size:0.85rem; color:var(--muted); margin-top:0.35rem; }
+
+        /* SHARED */
+        .section-label { font-size:0.78rem; font-weight:600; text-transform:uppercase; letter-spacing:2px; color:var(--teal); margin-bottom:0.65rem; }
+        .section-title { font-family:'Playfair Display',serif; font-size:clamp(2rem,4vw,2.8rem); font-weight:700; color:var(--navy); line-height:1.2; margin-bottom:1rem; }
+        .section-sub { font-size:1rem; color:var(--muted); line-height:1.7; max-width:520px; }
+
+        /* FEATURES */
+        .features { padding:6rem 0; background:var(--cream); }
+        .feature-card { background:white; border-radius:18px; padding:1.8rem; height:100%; border:1px solid rgba(0,0,0,0.04); transition:all 0.3s; position:relative; overflow:hidden; }
+        .feature-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:var(--teal); transform:scaleX(0); transition:transform 0.3s; transform-origin:left; }
+        .feature-card:hover { transform:translateY(-4px); box-shadow:0 12px 40px rgba(0,0,0,0.08); }
+        .feature-card:hover::before { transform:scaleX(1); }
+        .feature-icon { width:50px; height:50px; background:var(--teal-pale); border-radius:13px; display:flex; align-items:center; justify-content:center; font-size:1.3rem; color:var(--teal); margin-bottom:1.1rem; }
+        .feature-card h5 { font-family:'Playfair Display',serif; font-size:1.1rem; font-weight:700; color:var(--navy); margin-bottom:0.55rem; }
+        .feature-card p { font-size:0.86rem; color:var(--muted); line-height:1.65; margin:0; }
+
+        /* ABOUT */
+        .about { padding:6rem 0; background:white; }
+        .about-card { background:var(--cream); border-radius:24px; padding:3rem; position:relative; overflow:hidden; height:100%; }
+        .about-card::after { content:'\201C'; position:absolute; top:-20px; right:30px; font-family:'Playfair Display',serif; font-size:11rem; color:rgba(10,124,124,0.08); line-height:1; pointer-events:none; }
+        .about-card blockquote { font-family:'Playfair Display',serif; font-size:clamp(1.1rem,2.2vw,1.5rem); font-style:italic; color:var(--navy); line-height:1.55; margin-bottom:1.2rem; position:relative; z-index:1; border:none; padding:0; }
+        .about-card p { font-size:0.94rem; color:var(--muted); line-height:1.8; margin-bottom:0.85rem; position:relative; z-index:1; }
+        .about-sig { display:flex; align-items:center; gap:1rem; margin-top:1.8rem; position:relative; z-index:1; }
+        .about-avatar { width:48px; height:48px; background:linear-gradient(135deg,var(--teal),var(--navy)); border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-size:1.2rem; }
+        .about-name { font-weight:600; color:var(--text); font-size:0.92rem; }
+        .about-role { font-size:0.78rem; color:var(--muted); }
+        .about-visual { background:linear-gradient(135deg,var(--navy) 0%,#0a4a6e 100%); border-radius:24px; padding:2.5rem 2rem; color:white; text-align:center; height:100%; display:flex; flex-direction:column; justify-content:center; }
+        .about-visual i { font-size:3.5rem; margin-bottom:1.3rem; opacity:0.85; }
+        .about-visual h3 { font-family:'Playfair Display',serif; font-size:1.5rem; margin-bottom:0.85rem; }
+        .about-visual p { font-size:0.86rem; opacity:0.65; line-height:1.65; }
+        .about-pill { display:inline-block; background:rgba(255,255,255,0.12); border-radius:50px; padding:0.35rem 0.9rem; font-size:0.78rem; margin:0.25rem; }
+
+        /* HOW IT WORKS */
+        .how { padding:6rem 0; background:var(--cream); }
+        .step-item { display:flex; gap:1.4rem; margin-bottom:2.2rem; }
+        .step-num { width:46px; height:46px; min-width:46px; background:var(--navy); color:white; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'Playfair Display',serif; font-size:1.15rem; font-weight:700; }
+        .step-content h5 { font-weight:600; color:var(--navy); margin-bottom:0.35rem; font-size:0.97rem; }
+        .step-content p { font-size:0.86rem; color:var(--muted); line-height:1.6; margin:0; }
+
+        /* CTA */
+        .cta { padding:6rem 0; background:linear-gradient(135deg,var(--navy) 0%,#0a3d5c 100%); position:relative; overflow:hidden; }
+        .cta::before { content:''; position:absolute; top:-50%; right:-10%; width:600px; height:600px; background:radial-gradient(circle,rgba(10,124,124,0.2) 0%,transparent 60%); border-radius:50%; }
+        .cta h2 { font-family:'Playfair Display',serif; font-size:clamp(2rem,4vw,3rem); color:white; line-height:1.2; margin-bottom:1rem; }
+        .cta p { color:rgba(255,255,255,0.6); font-size:1rem; line-height:1.7; margin-bottom:2rem; }
+        .btn-cta { background:white; color:var(--teal); padding:0.9rem 2.5rem; border-radius:50px; font-size:0.95rem; font-weight:600; text-decoration:none; display:inline-flex; align-items:center; gap:0.5rem; transition:all 0.25s; }
+        .btn-cta:hover { transform:translateY(-2px); color:var(--teal); }
+        .btn-cta-outline { background:transparent; color:white; padding:0.9rem 2.5rem; border-radius:50px; font-size:0.95rem; font-weight:500; text-decoration:none; display:inline-flex; align-items:center; gap:0.5rem; border:1.5px solid rgba(255,255,255,0.35); transition:all 0.25s; }
+        .btn-cta-outline:hover { border-color:white; color:white; transform:translateY(-2px); }
+
+        /* FOOTER */
+        footer { background:#060d14; padding:4rem 0 2rem; }
+        .footer-brand { font-family:'Playfair Display',serif; font-size:1.55rem; color:white; font-weight:700; margin-bottom:0.4rem; }
+        .footer-brand span { color:var(--teal-light); }
+        .footer-tagline { font-size:0.82rem; color:rgba(255,255,255,0.35); margin-bottom:1.1rem; }
+        .footer-desc { font-size:0.82rem; color:rgba(255,255,255,0.38); line-height:1.65; }
+        .footer-links h6 { color:white; font-size:0.82rem; font-weight:600; text-transform:uppercase; letter-spacing:1px; margin-bottom:0.9rem; }
+        .footer-links a { display:block; color:rgba(255,255,255,0.4); text-decoration:none; font-size:0.82rem; margin-bottom:0.45rem; transition:color 0.2s; }
+        .footer-links a:hover { color:var(--teal-light); }
+        hr.footer-divider { border-color:rgba(255,255,255,0.07); margin:2rem 0 1.4rem; }
+        .footer-bottom { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem; }
+        .footer-bottom p { font-size:0.78rem; color:rgba(255,255,255,0.28); margin:0; }
+        .footer-ribbon { font-size:0.78rem; color:var(--teal-light); display:inline-flex; align-items:center; gap:0.4rem; }
+
+        /* ANIMATIONS */
+        @keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+        .fade-up { opacity:0; transform:translateY(30px); transition:opacity 0.6s ease,transform 0.6s ease; }
+        .fade-up.visible { opacity:1; transform:translateY(0); }
+
+        @media(max-width:768px) {
+            .hero { min-height:auto; }
+            .hero-card { margin-top:3rem; }
+            .about-card { padding:2rem; }
+            .about-card::after { display:none; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg">
+    <div class="container">
+        <a class="navbar-brand" href="#">Onco<span>care</span></a>
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#nav" style="filter:invert(1);">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="nav">
+            <ul class="navbar-nav mx-auto">
+                <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
+                <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+                <li class="nav-item"><a class="nav-link" href="#how">How It Works</a></li>
+            </ul>
+            <div class="d-flex gap-2 mt-2 mt-lg-0">
+                <a href="/accounts/login/" class="btn-nav-login">Log In</a>
+                <a href="/accounts/register/" class="btn-nav-signup">Get Started</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-bg2"></div>
+    <div class="container position-relative" style="z-index:1;">
+        <div class="row align-items-center gy-5">
+            <div class="col-lg-6">
+                <div class="hero-badge">
+                    <i class="bi bi-heart-pulse-fill"></i>
+                    Built for cancer patients, by a cancer patient
+                </div>
+                <h1>Your recovery,<br><em>organized.</em></h1>
+                <p class="hero-sub">
+                    Oncocare helps you manage treatments, appointments, medications,
+                    lab reports, and cancer-specific biomarker trends —
+                    all in one calm, organized place.
+                </p>
+                <div class="hero-buttons">
+                    <a href="/accounts/register/" class="btn-primary-main">
+                        <i class="bi bi-person-plus"></i> Start for Free
+                    </a>
+                    <a href="#features" class="btn-secondary-main">
+                        <i class="bi bi-arrow-down"></i> See Features
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="hero-card">
+                    <div class="hero-card-header">
+                        <div class="avatar"><i class="bi bi-person"></i></div>
+                        <div>
+                            <h6>Patient Dashboard</h6>
+                            <small>Last updated today</small>
+                        </div>
+                        <span class="ms-auto" style="font-size:0.72rem;color:#16a34a;display:flex;align-items:center;gap:0.3rem;">
+                            <i class="bi bi-circle-fill" style="font-size:0.4rem;"></i> Active
+                        </span>
+                    </div>
+                    <div class="stat-row">
+                        <div class="stat-box">
+                            <div class="num">3</div>
+                            <div class="lbl">Appointments</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="num">5</div>
+                            <div class="lbl">Medications</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="num">2</div>
+                            <div class="lbl">Treatments</div>
+                        </div>
+                    </div>
+                    <div class="mini-appt">
+                        <i class="bi bi-calendar-check"></i>
+                        <div>
+                            <div class="at">Dr. Sharma — Oncology</div>
+                            <div class="ad">Tomorrow, 10:30 AM</div>
+                        </div>
+                        <span class="ms-auto" style="background:var(--teal-pale);color:var(--teal);padding:0.2rem 0.6rem;border-radius:50px;font-size:0.7rem;font-weight:600;">Upcoming</span>
+                    </div>
+                    <div class="trend-mini">
+                        <div>
+                            <div class="tl">Thyroglobulin (Tg)</div>
+                            <div class="ts">Thyroid Cancer Marker</div>
+                        </div>
+                        <div class="tv"><i class="bi bi-arrow-down-short"></i> 2.3 ng/mL ↓ Good</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- STATS STRIP -->
+<section class="stats-strip">
+    <div class="container">
+        <div class="row gy-4">
+            <div class="col-6 col-md-3 stat-item">
+                <span class="stat-num-lg">10+</span>
+                <div class="stat-desc">Cancer types supported</div>
+            </div>
+            <div class="col-6 col-md-3 stat-item">
+                <span class="stat-num-lg">26+</span>
+                <div class="stat-desc">Biomarkers tracked</div>
+            </div>
+            <div class="col-6 col-md-3 stat-item">
+                <span class="stat-num-lg">7</span>
+                <div class="stat-desc">Modules in one place</div>
+            </div>
+            <div class="col-6 col-md-3 stat-item">
+                <span class="stat-num-lg">100%</span>
+                <div class="stat-desc">Free to use</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features" id="features">
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-lg-6 fade-up">
+                <div class="section-label">What We Offer</div>
+                <h2 class="section-title">Everything you need,<br>nothing you don't.</h2>
+            </div>
+            <div class="col-lg-6 fade-up">
+                <p class="section-sub" style="margin-top:1rem;">
+                    Oncocare is designed around how cancer patients actually live —
+                    follow-ups every few months, multiple doctors, and test results
+                    that need to be understood, not just stored.
+                </p>
+            </div>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-4 fade-up">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="bi bi-graph-up-arrow"></i></div>
+                    <h5>Biomarker Trend Tracking</h5>
+                    <p>Log blood test results after each follow-up. See whether your markers are improving over time with plain guidance explaining what each trend means.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4 fade-up">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="bi bi-calendar2-heart"></i></div>
+                    <h5>Appointment Manager</h5>
+                    <p>Track every doctor visit — upcoming, completed, or cancelled. Never lose track of your next follow-up date.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4 fade-up">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="bi bi-capsule"></i></div>
+                    <h5>Medication Tracker</h5>
+                    <p>Log all your medicines with dosage, frequency, and reminder times. Know exactly what you are taking and when.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4 fade-up">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="bi bi-activity"></i></div>
+                    <h5>Treatment Log</h5>
+                    <p>Track chemotherapy cycles, radiation sessions, surgeries, and more. See your progress with a visual cycle counter.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4 fade-up">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="bi bi-file-earmark-medical"></i></div>
+                    <h5>Lab Report Upload</h5>
+                    <p>Upload your lab reports as PDFs or images. Add a short summary so you always know what each report said.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4 fade-up">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="bi bi-journal-heart"></i></div>
+                    <h5>Symptom Diary</h5>
+                    <p>Log how you feel each day with a severity rating. Build a picture of your health over time to share with your doctor.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4 fade-up">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="bi bi-file-earmark-pdf"></i></div>
+                    <h5>PDF Health Summary</h5>
+                    <p>Download a clean, printable PDF of your entire health history — appointments, medications, treatments, and symptoms — to share with your doctor.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4 fade-up">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="bi bi-envelope-heart"></i></div>
+                    <h5>Appointment Reminders</h5>
+                    <p>Get an email reminder the day before every appointment so you never miss a follow-up visit.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4 fade-up">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="bi bi-shield-lock"></i></div>
+                    <h5>Private & Secure</h5>
+                    <p>Your health data belongs to you. We never share, sell, or use your information for anything other than showing it back to you.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+    <div class="container">
+        <div class="row mb-4 fade-up">
+            <div class="col-12 text-center">
+                <div class="section-label">The Story Behind Oncocare</div>
+                <h2 class="section-title">Why I built this</h2>
+            </div>
+        </div>
+        <div class="row g-4 align-items-stretch">
+            <div class="col-lg-8 fade-up">
+                <div class="about-card">
+                    <blockquote>
+                        "Being a cancer patient myself, I understand the hardships
+                        of managing follow-up care — and I wanted to build something
+                        to make it easier."
+                    </blockquote>
+                    <p>
+                        Keeping track of appointments, medicines, blood test results,
+                        and treatment cycles is overwhelming. Most patients do it
+                        through paper notes and memory. It shouldn't be this hard.
+                    </p>
+                    <p>
+                        Oncocare is my way of turning a personal experience into
+                        something useful — a simple, organized place where cancer
+                        patients can manage their entire recovery journey.
+                    </p>
+                    <div class="about-sig">
+                        <div class="about-avatar"><i class="bi bi-person"></i></div>
+                        <div>
+                            <div class="about-name">Shreena</div>
+                            <div class="about-role">Creator of Oncocare &nbsp;·&nbsp; Cancer Patient &nbsp;·&nbsp; Software Engineering Student</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 fade-up">
+                <div class="about-visual">
+                    <i class="bi bi-heart-pulse"></i>
+                    <h3>Built with purpose</h3>
+                    <p>Every feature was designed around the real experience of living with cancer. Not a generic health app — a cancer-aware companion.</p>
+                    <div class="mt-3">
+                        <span class="about-pill">🎗️ Cancer-aware</span>
+                        <span class="about-pill">📊 Trend charts</span>
+                        <span class="about-pill">💊 Med tracking</span>
+                        <span class="about-pill">🔬 Lab reports</span>
+                        <span class="about-pill">📅 Appointments</span>
+                        <span class="about-pill">❤️ Made with care</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how" id="how">
+    <div class="container">
+        <div class="row gy-5 align-items-center">
+            <div class="col-lg-5 fade-up">
+                <div class="section-label">How It Works</div>
+                <h2 class="section-title">Simple to use,<br>from day one.</h2>
+                <p class="section-sub">
+                    You don't need to be tech-savvy. Oncocare is designed to be
+                    as simple as writing in a diary — just digital.
+                </p>
+            </div>
+            <div class="col-lg-6 offset-lg-1 fade-up">
+                <div class="step-item">
+                    <div class="step-num">1</div>
+                    <div class="step-content">
+                        <h5>Create your account</h5>
+                        <p>Register with your name and email. Takes less than a minute and is completely free.</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-num">2</div>
+                    <div class="step-content">
+                        <h5>Set up your cancer profile</h5>
+                        <p>Select your cancer type and the system automatically knows which biomarkers to track for you.</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-num">3</div>
+                    <div class="step-content">
+                        <h5>Log after each visit</h5>
+                        <p>After each doctor visit or blood test, log your results. Takes just a couple of minutes.</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-num">4</div>
+                    <div class="step-content">
+                        <h5>Watch your progress</h5>
+                        <p>Your dashboard shows trend charts, upcoming appointments, and a clear picture of your recovery.</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-num">5</div>
+                    <div class="step-content">
+                        <h5>Share with your doctor</h5>
+                        <p>Download your health summary as a PDF and bring it to your next appointment. Everything in one clean document.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+    <div class="container text-center position-relative">
+        <div class="section-label" style="color:rgba(255,255,255,0.45);">Get Started Today</div>
+        <h2>Your recovery journey deserves<br>to be <em style="font-style:italic;color:var(--teal-light);">organized.</em></h2>
+        <p>Join Oncocare and take control of your follow-up care.<br>It is free, private, and built for you.</p>
+        <div class="d-flex justify-content-center gap-3 flex-wrap">
+            <a href="/accounts/register/" class="btn-cta"><i class="bi bi-person-plus"></i> Create Free Account</a>
+            <a href="/accounts/login/" class="btn-cta-outline"><i class="bi bi-box-arrow-in-right"></i> Log In</a>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <div class="container">
+        <div class="row gy-4">
+            <div class="col-lg-4">
+                <div class="footer-brand">Onco<span>care</span></div>
+                <div class="footer-tagline">Cancer Care Companion & Follow-up Tracker</div>
+                <p class="footer-desc">A meaningful project built by a cancer patient to help others manage their recovery journey.</p>
+            </div>
+            <div class="col-6 col-lg-2 offset-lg-2 footer-links">
+                <h6>Features</h6>
+                <a href="#features">Appointments</a>
+                <a href="#features">Medications</a>
+                <a href="#features">Treatments</a>
+                <a href="#features">Lab Reports</a>
+                <a href="#features">Biomarkers</a>
+                <a href="#features">PDF Summary</a>
+            </div>
+            <div class="col-6 col-lg-2 footer-links">
+                <h6>Account</h6>
+                <a href="/accounts/register/">Register</a>
+                <a href="/accounts/login/">Login</a>
+                <a href="/accounts/profile/">My Profile</a>
+                <a href="/dashboard/">Dashboard</a>
+            </div>
+            <div class="col-lg-2 footer-links">
+                <h6>Learn More</h6>
+                <a href="#about">About</a>
+                <a href="#how">How It Works</a>
+                <a href="#features">All Features</a>
+                <a href="/privacy/">Privacy Policy</a>
+            </div>
+        </div>
+        <hr class="footer-divider">
+        <div class="footer-bottom">
+            <p>© 2025 Oncocare. Built as a Django internship project.</p>
+            <div class="footer-ribbon"><i class="bi bi-heart-fill" style="font-size:0.65rem;"></i> Built by Shreena</div>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry, i) => {
+            if (entry.isIntersecting) {
+                setTimeout(() => entry.target.classList.add('visible'), i * 80);
+            }
+        });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

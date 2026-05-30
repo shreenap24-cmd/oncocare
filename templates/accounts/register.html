@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oncocare — Register</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root { --teal:#0a7c7c; --teal-light:#12a5a5; --teal-pale:#e6f7f7; --navy:#0d2b45; --cream:#faf8f5; --text:#1a2e3b; --muted:#6b8190; }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'DM Sans',sans-serif; min-height:100vh; background:var(--cream); display:flex; align-items:center; justify-content:center; padding:2rem; }
+
+        .register-card {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+            overflow: hidden;
+            width: 100%;
+            max-width: 900px;
+            display: flex;
+        }
+
+        .reg-left {
+            background: linear-gradient(135deg, var(--navy) 0%, #0a4a6e 100%);
+            padding: 3rem 2.5rem;
+            width: 280px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .brand { font-family:'Playfair Display',serif; font-size:1.7rem; color:white; font-weight:700; margin-bottom:0.3rem; }
+        .brand span { color:var(--teal-light); }
+        .brand-tag { color:rgba(255,255,255,0.4); font-size:0.78rem; margin-bottom:2rem; }
+        .reg-left h3 { font-family:'Playfair Display',serif; color:white; font-size:1.2rem; margin-bottom:0.75rem; }
+        .reg-left p { color:rgba(255,255,255,0.5); font-size:0.82rem; line-height:1.6; }
+
+        .step-list { margin-top:2rem; }
+        .step { display:flex; align-items:center; gap:0.6rem; color:rgba(255,255,255,0.6); font-size:0.8rem; margin-bottom:0.75rem; }
+        .step-num { width:22px; height:22px; border-radius:50%; background:var(--teal); color:white; display:flex; align-items:center; justify-content:center; font-size:0.7rem; font-weight:700; flex-shrink:0; }
+
+        .reg-right { flex:1; padding:2.5rem; overflow-y:auto; }
+        .reg-right h2 { font-family:'Playfair Display',serif; font-size:1.7rem; color:var(--navy); margin-bottom:0.3rem; }
+        .reg-right p { color:var(--muted); font-size:0.875rem; margin-bottom:2rem; }
+
+        label { font-size:0.82rem; font-weight:600; color:var(--navy); margin-bottom:0.35rem; display:block; }
+
+        input { width:100%; padding:0.65rem 1rem; border:1.5px solid #e8edf2; border-radius:12px; font-size:0.875rem; font-family:'DM Sans',sans-serif; color:var(--text); background:white; transition:all 0.2s; outline:none; }
+        input:focus { border-color:var(--teal); box-shadow:0 0 0 3px rgba(10,124,124,0.1); }
+
+        .form-group { margin-bottom:1rem; }
+
+        .btn-register { width:100%; background:var(--teal); color:white; border:none; padding:0.85rem; border-radius:50px; font-size:0.95rem; font-weight:600; cursor:pointer; transition:all 0.25s; font-family:'DM Sans',sans-serif; margin-top:0.5rem; }
+        .btn-register:hover { background:var(--teal-light); transform:translateY(-1px); }
+
+        .login-link { text-align:center; font-size:0.875rem; color:var(--muted); margin-top:1.2rem; }
+        .login-link a { color:var(--teal); font-weight:600; text-decoration:none; }
+
+        @media(max-width:640px) { .reg-left { display:none; } .register-card { max-width:440px; } }
+    </style>
+</head>
+<body>
+
+<div class="register-card">
+    <div class="reg-left">
+        <div class="brand">Onco<span>care</span></div>
+        <div class="brand-tag">Cancer Care Companion</div>
+        <h3>Start your journey</h3>
+        <p>Create a free account and take control of your cancer follow-up care.</p>
+        <div class="step-list">
+            <div class="step"><div class="step-num">1</div> Create your account</div>
+            <div class="step"><div class="step-num">2</div> Set up your cancer profile</div>
+            <div class="step"><div class="step-num">3</div> Start tracking your health</div>
+            <div class="step"><div class="step-num">4</div> Watch your progress</div>
+        </div>
+    </div>
+    <div class="reg-right">
+        <h2>Create account</h2>
+        <p>Join Oncocare — it's free and always will be.</p>
+        <form method="POST">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="form-group">
+                <label>{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}<div style="color:#dc2626;font-size:0.78rem;margin-top:0.3rem;">{{ field.errors.0 }}</div>{% endif %}
+                {% if field.help_text %}<div style="color:var(--muted);font-size:0.75rem;margin-top:0.25rem;">{{ field.help_text }}</div>{% endif %}
+            </div>
+            {% endfor %}
+            <button type="submit" class="btn-register"><i class="bi bi-person-plus"></i> Create My Account</button>
+        </form>
+        <div class="login-link">
+            Already have an account? <a href="{% url 'login' %}">Sign in</a>
+        </div>
+        <div style="text-align:center;margin-top:0.75rem;">
+            <a href="/" style="color:var(--muted);font-size:0.8rem;text-decoration:none;">← Back to home</a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
