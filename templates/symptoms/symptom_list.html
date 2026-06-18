@@ -50,7 +50,7 @@
 
 <div class="page-card">
     <div class="page-card-header">
-        <h5><i class="bi bi-journal-heart"></i> All Symptoms</h5>
+        <h5><i class="bi bi-thermometer-half"></i> All Symptoms</h5>
         <a href="{% url 'symptom_add' %}" class="btn-teal">
             <i class="bi bi-plus-lg"></i> Log Symptom
         </a>
@@ -89,7 +89,7 @@
         </div>
         {% else %}
         <div class="empty-state">
-            <i class="bi bi-journal-heart"></i>
+            <i class="bi bi-thermometer-half"></i>
             <p>No symptoms found for this date range.<br>
             <a href="{% url 'symptom_list' %}" style="color:var(--teal);">Clear filter</a>
             or <a href="{% url 'symptom_add' %}" style="color:var(--teal);">log a new symptom</a></p>

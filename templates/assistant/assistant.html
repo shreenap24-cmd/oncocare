@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+{% block title %}Health Assistant{% endblock %}
+{% block nav_assistant %}active{% endblock %}
+{% block page_title %}Health Assistant{% endblock %}
+{% block page_subtitle %}Ask questions about your health and cancer care{% endblock %}
+
+{% block extra_style %}
+.chat-wrap { height:500px; overflow-y:auto; background:var(--bg); border-radius:var(--radius); padding:1.2rem; margin-bottom:1rem; }
+.user-bubble { display:flex; justify-content:flex-end; margin-bottom:1rem; }
+.user-bubble .bubble { background:var(--teal); color:white; padding:0.7rem 1rem; border-radius:18px 18px 4px 18px; max-width:75%; font-size:0.875rem; line-height:1.5; }
+.ai-bubble { display:flex; gap:0.75rem; margin-bottom:1rem; align-items:flex-start; }
+.ai-icon { width:32px; height:32px; background:var(--navy); border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-size:0.85rem; flex-shrink:0; }
+.ai-bubble .bubble { background:white; color:var(--text); padding:0.7rem 1rem; border-radius:4px 18px 18px 18px; max-width:85%; font-size:0.875rem; line-height:1.6; box-shadow:0 2px 8px rgba(0,0,0,0.06); }
+.typing { display:flex; gap:4px; padding:0.5rem; }
+.typing span { width:8px; height:8px; background:var(--muted); border-radius:50%; animation:bounce 1.2s infinite; }
+.typing span:nth-child(2) { animation-delay:0.2s; }
+.typing span:nth-child(3) { animation-delay:0.4s; }
+@keyframes bounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-8px)} }
+.suggestion-btn { background:var(--cream); border:1px solid var(--border); border-radius:50px; padding:0.3rem 0.8rem; font-size:0.78rem; color:var(--muted); cursor:pointer; transition:all 0.2s; font-family:'DM Sans',sans-serif; }
+.suggestion-btn:hover { background:var(--teal-pale); color:var(--teal); border-color:var(--teal); }
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+
+        <div style="background:var(--teal-pale);border-left:3px solid var(--teal);border-radius:0 12px 12px 0;padding:0.9rem 1.2rem;margin-bottom:1.5rem;">
+            <div style="font-size:0.88rem;font-weight:600;color:var(--teal);">
+                <i class="bi bi-info-circle"></i> About this assistant
+            </div>
+            <div style="font-size:0.82rem;color:var(--muted);margin-top:0.3rem;">
+                This AI assistant answers general questions about cancer care.
+                Always consult your doctor for medical decisions.
+            </div>
+        </div>
+
+        <div class="page-card">
+            <div class="page-card-header">
+                <h5><i class="bi bi-robot"></i> Health Assistant</h5>
+                <span style="font-size:0.78rem;color:#16a34a;display:flex;align-items:center;gap:0.3rem;">
+                    <i class="bi bi-circle-fill" style="font-size:0.45rem;"></i> Online
+                </span>
+            </div>
+            <div class="page-card-body">
+
+                <div class="chat-wrap" id="chat">
+                    <div class="ai-bubble">
+                        <div class="ai-icon"><i class="bi bi-robot"></i></div>
+                        <div class="bubble">
+                            Hi! I am your Oncocare health assistant. I can answer questions about
+                            cancer care, medications, biomarkers, and treatment side effects.
+                            How can I help you today?
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display:flex;gap:0.75rem;margin-bottom:1rem;">
+                    <input type="text" id="q-input"
+                           placeholder="Ask a question about your health..."
+                           style="flex:1;padding:0.7rem 1rem;border:1.5px solid var(--border);border-radius:50px;font-size:0.875rem;font-family:'DM Sans',sans-serif;outline:none;"
+                           onkeypress="if(event.key==='Enter') ask()">
+                    <button onclick="ask()" class="btn-teal" id="ask-btn">
+                        <i class="bi bi-send"></i> Ask
+                    </button>
+                </div>
+
+                <div style="display:flex;flex-wrap:wrap;gap:0.5rem;">
+                    <button onclick="fill('What does Thyroglobulin measure?')" class="suggestion-btn">What does Thyroglobulin measure?</button>
+                    <button onclick="fill('What are side effects of chemotherapy?')" class="suggestion-btn">Chemotherapy side effects?</button>
+                    <button onclick="fill('What should I eat during cancer treatment?')" class="suggestion-btn">Diet during treatment?</button>
+                    <button onclick="fill('How often should I get blood tests?')" class="suggestion-btn">Blood test frequency?</button>
+                    <button onclick="fill('What is PSA and why is it important?')" class="suggestion-btn">What is PSA?</button>
+                    <button onclick="fill('How can I manage fatigue during treatment?')" class="suggestion-btn">Managing fatigue?</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function getCookie(name) {
+    let value = null;
+    if (document.cookie) {
+        document.cookie.split(';').forEach(c => {
+            c = c.trim();
+            if (c.startsWith(name + '=')) value = decodeURIComponent(c.slice(name.length + 1));
+        });
+    }
+    return value;
+}
+
+function fill(q) {
+    document.getElementById('q-input').value = q;
+    document.getElementById('q-input').focus();
+}
+
+function ask() {
+    const input  = document.getElementById('q-input');
+    const chat   = document.getElementById('chat');
+    const btn    = document.getElementById('ask-btn');
+    const question = input.value.trim();
+    if (!question) return;
+
+    // User message
+    chat.innerHTML += `
+        <div class="user-bubble">
+            <div class="bubble">${question}</div>
+        </div>`;
+
+    // Typing indicator
+    chat.innerHTML += `
+        <div class="ai-bubble" id="typing">
+            <div class="ai-icon"><i class="bi bi-robot"></i></div>
+            <div class="bubble">
+                <div class="typing"><span></span><span></span><span></span></div>
+            </div>
+        </div>`;
+
+    chat.scrollTop = chat.scrollHeight;
+    input.value = '';
+    btn.disabled = true;
+    btn.innerHTML = '<i class="bi bi-hourglass-split"></i> Thinking...';
+
+    fetch('/assistant/ask/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken'),
+        },
+        body: JSON.stringify({ question: question })
+    })
+    .then(r => r.json())
+    .then(data => {
+        document.getElementById('typing').remove();
+        chat.innerHTML += `
+            <div class="ai-bubble">
+                <div class="ai-icon"><i class="bi bi-robot"></i></div>
+                <div class="bubble">${data.answer || data.error}</div>
+            </div>`;
+        chat.scrollTop = chat.scrollHeight;
+        btn.disabled = false;
+        btn.innerHTML = '<i class="bi bi-send"></i> Ask';
+    })
+    .catch(() => {
+        document.getElementById('typing').remove();
+        chat.innerHTML += `
+            <div class="ai-bubble">
+                <div class="ai-icon"><i class="bi bi-robot"></i></div>
+                <div class="bubble" style="color:#dc2626;">
+                    Sorry, something went wrong. Please try again.
+                </div>
+            </div>`;
+        btn.disabled = false;
+        btn.innerHTML = '<i class="bi bi-send"></i> Ask';
+    });
+}
+</script>
+{% endblock %}

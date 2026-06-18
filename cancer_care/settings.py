@@ -1,16 +1,16 @@
 from pathlib import Path
 import os
+from dotenv import load_dotenv
 
-# BASE DIR
+load_dotenv()
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # SECURITY
-SECRET_KEY = 'django-insecure-$qvy)pij+^ut3o7l93g6&u%x3ni(32d_+*y7qjjf*ig-dt_-*_'  # keep secret
+SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = True
 ALLOWED_HOSTS = []
 CSRF_TRUSTED_ORIGINS = ['http://localhost:8000', 'http://127.0.0.1:8000']
-
 
 # APPLICATIONS
 INSTALLED_APPS = [
@@ -20,8 +20,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
-    # your apps
     'accounts',
     'appointments',
     'medications',
@@ -31,8 +29,8 @@ INSTALLED_APPS = [
     'biomarkers',
     'dashboard',
     'home',
+    #'assistant',
 ]
-
 
 # MIDDLEWARE
 MIDDLEWARE = [
@@ -45,10 +43,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-
 # ROOT URL
 ROOT_URLCONF = 'cancer_care.urls'
-
 
 # TEMPLATES
 TEMPLATES = [
@@ -66,10 +62,8 @@ TEMPLATES = [
     },
 ]
 
-
 # WSGI
 WSGI_APPLICATION = 'cancer_care.wsgi.application'
-
 
 # DATABASE
 DATABASES = {
@@ -79,7 +73,6 @@ DATABASES = {
     }
 }
 
-
 # PASSWORD VALIDATION
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
@@ -88,13 +81,11 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-
 # INTERNATIONALIZATION
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
-
 
 # STATIC FILES
 STATIC_URL = '/static/'
@@ -102,25 +93,27 @@ STATICFILES_DIRS = [
     BASE_DIR / "static"
 ]
 
-
 # MEDIA FILES
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
-
 
 # LOGIN SYSTEM
 LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/dashboard/'
 
-# Email Configuration
+# EMAIL
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'shreenap24@gmail.com'
-EMAIL_HOST_PASSWORD = 'tqka tfpa vccu xjrk'  # your app password
-DEFAULT_FROM_EMAIL = 'Oncocare <shreenap24@gmail.com>'
+EMAIL_HOST_USER     = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL  = f'Oncocare <{os.getenv("EMAIL_HOST_USER")}>'
 
+# AI
+OPENROUTER_API_KEY = os.getenv('OPENROUTER_API_KEY')
+
+# CSRF
 CSRF_COOKIE_SECURE = False
 CSRF_USE_SESSIONS = False
 CSRF_COOKIE_HTTPONLY = False
