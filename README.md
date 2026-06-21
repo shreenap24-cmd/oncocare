@@ -4,6 +4,13 @@
 
 ---
 
+---
+## 🌐 Live Demo
+
+👉 **[oncocareapp.pythonanywhere.com](https://oncocareapp.pythonanywhere.com)**
+
+---
+
 
 ## 📌 About This Project
 
@@ -61,7 +68,7 @@ oncocare/
 └── templates/       # All HTML templates
 ~~~
 
-## 🚀 Setup Instructions
+## 🚀 Run Locally
 
 **1. Clone the repository**
 ```bash
