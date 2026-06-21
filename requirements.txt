@@ -1,0 +1,5 @@
+django
+reportlab
+requests
+python-dotenv
+Pillow
